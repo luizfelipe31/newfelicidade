@@ -611,6 +611,28 @@ class ContractController extends Admin
         $contracts = (new Contract())->find("status=1 and date_next_readjustment=:d and contract_situation='active' and account_id=:c","c={$this->user->account_id}&d={$get_date}")->fetch(true);
         
         $date_readjustment = date("m/Y");
+        $readjustment_type = "";
+        
+        if (!empty($data["action"]) && $data["action"] == "search") {
+            
+            $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+
+            $data = (object)$post;
+            
+            $readjustment_type = $data->readjustment_type; 
+            
+            $date_readjustment = $data->date_readjustment;
+            
+            $date_readjustment_convert = return_date_readjustment($data->date_readjustment);
+                        
+            if($data->readjustment_type!=""){
+              $contracts = (new Contract())->find("status=1 and date_next_readjustment=:d and readjustment_type=:t and contract_situation='active' and account_id=:c","c={$this->user->account_id}&d={$date_readjustment_convert}&t={$readjustment_type}")->fetch(true);
+            }else{
+              $contracts = (new Contract())->find("status=1 and date_next_readjustment=:d and contract_situation='active' and account_id=:c","c={$this->user->account_id}&d={$date_readjustment_convert}")->fetch(true); 
+            
+            }
+           
+        }
         
         $head = $this->seo->render(
             CONF_SITE_NAME . " | Reajuste de Contrato",
@@ -625,9 +647,29 @@ class ContractController extends Admin
             "menu" => "contract",
             "submenu" => "readjustment",
             "contracts" => $contracts,
-            "date_readjustment" => $date_readjustment
+            "date_readjustment" => $date_readjustment,
+            "readjustment_type" => $readjustment_type
         ]);
     }
+    
+    /**
+     * Método que realiza o reajuste
+     * @param array $data
+     * @return void
+     */
+    public function readjustmentDo(array $data): void{
+        
+            $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+
+            $data = (object)$post;
+            
+            $this->message->info("Contraro reajustado com sucesso...")->flash();
+            $json["redirect"] = url("/contrato/reajuste");
+
+            echo json_encode($json);
+            return;
+    }
+    
     /**
      * @param array $data
      */

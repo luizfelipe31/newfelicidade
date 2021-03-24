@@ -370,6 +370,20 @@ function validate_date(string $date): bool{
     $date_part2=substr($date , 6, 4);
     return checkdate($date_part1, $date_part, $date_part2);
 }
+
+/**
+ * converte data de reajuste
+ * @param string $date
+ * @return string
+ */
+function return_date_readjustment(string $date): string{
+   
+    $date_part=substr($date , 0, 2);
+    $date_part1=substr($date , 3, 4); 
+    
+    return $date_part1."-".$date_part."-01";
+     
+}
 /**
  * ####################
  * ###   PASSWORD   ###

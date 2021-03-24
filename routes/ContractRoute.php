@@ -16,4 +16,5 @@ $router->post("/contrato/gerar-aluguel", "ContractController:automaticBilling","
 
 /** Reajuste **/
 $router->get("/contrato/reajuste", "ContractController:readjustment","contract.readjustment");
-$router->get("/contrato/reajuste/search=", "ContractController:readjustment","contract.readjustmentSearch");
+$router->post("/contrato/reajuste", "ContractController:readjustment","contract.readjustmentSearch");
+$router->post("/contrato/reajuste/do", "ContractController:readjustmentDo","contract.readjustmentDo");

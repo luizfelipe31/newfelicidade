@@ -25,7 +25,7 @@
             <div class="row">
             <?php
             if($contracts):?>
-                <table id="example1" class="display" >
+                <table id="example2" class="display" >
                     <thead>
                     <tr>
                         <th>Imóvel</th>
@@ -54,8 +54,8 @@
                               endforeach;?>
                             </td>
                             <td><?=date_fmt2($contract->start_date);?></td>
-                            <td><?=str_price($contract->lease_price);?></td>
-                            <td><?=str_price($contract->commission);?></td>
+                            <td>R$<?=str_price($contract->lease_price);?></td>
+                            <td><?=str_price($contract->commission);?>%</td>
                             <td><a class="generate" href="#" data-cod="<?= $contract->cod; ?>" data-lease="<?= str_price($contract->lease_price); ?>" data-paymento_form="<?= $contract->paymento_form; ?>" data-due_date="<?= $contract->due_date;?>" data-property="<?=$property;?>" data-toggle="modal" data-target="#modalGenerate"><i class="fas fa-sync"></i></a></td>
                         </tr>
                     <?php endforeach; ?>

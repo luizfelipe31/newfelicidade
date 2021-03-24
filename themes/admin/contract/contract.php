@@ -60,8 +60,8 @@
                               endforeach;?>
                             </td>
                             <td><?=date_fmt2($contract->start_date);?></td>
-                            <td><?=str_price($contract->lease_price);?></td>
-                            <td><?=str_price($contract->commission);?></td>
+                            <td>R$<?=str_price($contract->lease_price);?></td>
+                            <td><?=str_price($contract->commission);?>%</td>
                             <td><?=date_fmt_my($contract->date_next_readjustment);?></td>
                             <td><?php if($contract->contract_situation=="active"): echo "Ativo"; endif;?></td>
                             <td><a href="<?= url("/contrato/alterar/{$contract->cod}"); ?>" class="btn btn-primary">Alterar</a></td>

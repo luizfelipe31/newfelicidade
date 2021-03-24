@@ -104,7 +104,7 @@ $(function () {
         });
     });
 
-    $(".ajax_form").submit(function (e) {
+    /*$(".ajax_form").submit(function (e) {
         e.preventDefault();
 
         var form = $(this);
@@ -207,7 +207,7 @@ $(function () {
                 alert("Erro ao processar requisição");
             });
         }
-    });
+    });*/
 
 
     //TEXT
