@@ -77,6 +77,8 @@
                     <!-- /.card-header -->
                     <br>
                     <form action="<?= $router->route("contract.readjustmentDo"); ?>" method="post" >
+                        <?= csrf_input(); ?>
+                        <input type="hidden" name="date_readjustment_hiden" value="<?= $date_readjustment ?>"/>
                         <div class="row">
                             <div class="col-md-5">
 
@@ -116,7 +118,7 @@
                                     foreach ($contracts as $contract):
                                         $property = $contract->getProperty()->street . " " . $contract->getProperty()->number . " " . $contract->getProperty()->complement . ", " . $contract->getProperty()->district . " - " . $contract->getProperty()->state . " - " . $contract->getProperty()->city;
                                         ?>
-                                    <input type="hidden" class="form-control mask-money" id="readjustment_value_hidden_<?= ltrim($i); ?>" value="<?= str_price($contract->lease_price); ?>">
+                                    <input type="hidden" class="form-control mask-money" name="readjustment_value_hidden_<?= ltrim($contract->cod); ?>" id="readjustment_value_hidden_<?= ltrim($i); ?>" value="<?= str_price($contract->lease_price); ?>">
                                     <tr>
                                         <td><?= $property; ?></td>
                                         <td><?= $contract->readjustment_type; ?></td>
@@ -124,7 +126,7 @@
                                         <td><input type="text" class="form-control mask-money" name="readjustment_value_<?= ltrim($contract->cod); ?>" id="readjustment_value_<?= ltrim($i); ?>" placeholder="% Reajuste"></td>
                                         <td align="right">
                                             <div class="icheck-success d-inline">
-                                                <input type="checkbox" name="ch_contract_<?= ltrim($contract->cod); ?>" id="chSuccess_<?= ltrim($contract->cod); ?>" class="mark">
+                                                <input type="checkbox" name="ch_contract[]" id="chSuccess_<?= ltrim($contract->cod); ?>" value="<?php echo ltrim($contract->cod)?>" class="mark">
                                                 <label for="chSuccess_<?= ltrim($contract->cod); ?>">
                                                 </label>
                                             </div>
@@ -165,7 +167,7 @@
     ?>
     <script>
         $(function () {
-            toastr.success("Contrato reajustado com sucesso.");
+            toastr.success("Contrato(s) reajustado(s) com sucesso.");
         });
     </script>
     <?php

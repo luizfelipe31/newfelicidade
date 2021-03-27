@@ -21,5 +21,10 @@ class Invoice extends DataLayer   {
     {
         parent::__construct("invoices", ["value","operation","category","wallet","reference_date","due_date","status_comission","status","account_id"]);    
     }
-    
+ 
+    public function save2(): bool {
+        parent::save();
+
+        return true;
+    }
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Source\App;
-
 
 use Source\Models\Bank;
 use Source\Models\Client;
@@ -513,7 +511,7 @@ class ContractController extends Admin
                 $invoice_create->status = 1;
                 $invoice_create->account_id = $this->user->account_id;
 
-                if (!$invoice_create->save()) {
+                if (!$invoice_create->save2()) {
                     $json["message"] = $invoice_create->fail()->getMessage();
                     echo json_encode($json);
                     return;
@@ -570,7 +568,7 @@ class ContractController extends Admin
             $log->account_id = $this->user->account_id;
             $log->user = $this->user->id;
             $log->ip = $_SERVER["REMOTE_ADDR"];
-            $log->description = "Gerar aluguel do contrato" . $cod;
+            $log->description = "Gerar aluguel do contrato " . $cod;
             $log->save();
             
             
@@ -659,9 +657,87 @@ class ContractController extends Admin
      */
     public function readjustmentDo(array $data): void{
         
-            $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+            $data = filter_var_array($data, FILTER_SANITIZE_STRIPPED);
+        
+            if (!empty($data['csrf'])) {
 
-            $data = (object)$post;
+                 if ($_REQUEST && !csrf_verify($_REQUEST)) {
+
+                     $json["message"] = "Erro ao enviar o formulário, atualize a página";
+                     echo json_encode($json);
+                     return;
+                 }
+            }
+            
+            if(!isset($data["ch_contract"])){
+                $json["message"] = "Seleciona um contrato";
+                echo json_encode($json);
+                return; 
+            }
+            
+            
+            $start_date = date_datetime('01/'.$data["date_readjustment_hiden"]);
+
+            $clone = clone $start_date;        
+            $date1=$clone->modify( '+ 1 month');
+            $date_one_month=$date1->format( "Y-m-d" );
+            
+            $clone2 = clone $start_date;        
+            $date2=$clone2->modify( '+ 12 month');
+            $date_twelve_month=$date2->format( "Y-m-d" ); 
+            
+                
+            foreach($data["ch_contract"] as $ch_contract){
+                
+                if($data["readjustment_value_".ltrim($ch_contract)]==""){
+                    $readjustment_value = $data["readjustment_value_hidden_".ltrim($ch_contract)];
+                }else{
+                    $readjustment_value = $data["readjustment_value_".ltrim($ch_contract)];
+                }
+ 
+                $contract = (new Contract)->find("cod=:c and account_id=:account","account={$this->user->account_id}&c={$ch_contract}")->fetch();
+                $contract->date_next_readjustment = $date_twelve_month;
+                $contract->lease_price = str_price_invert($readjustment_value);
+                $contract->save2();
+                
+                $contract_historic = new ContractHistoric();
+                $contract_historic->contract = $contract->id;
+                $contract_historic->lease_price = str_price_invert($readjustment_value);
+                $contract_historic->commission = $contract->commission;
+                $contract_historic->readjustment_type = $contract->readjustment_type;
+                $contract_historic->lease_term = $contract->lease_term;
+                $contract_historic->due_date = $contract->due_date;
+                $contract_historic->paymento_form = $contract->paymento_form;
+                $contract_historic->date_next_readjustment = $date_twelve_month;
+                $contract_historic->status_historic = 2;
+                $contract_historic->status = 1;
+                $contract_historic->account_id = $this->user->account_id;
+                $contract_historic->save();
+                        
+                $invoices = (new Invoice())->find("contract=:c and due_date>=:d and account_id=:account and category=1 and status=1","c={$contract->id}&d={$date_one_month}&account={$this->user->account_id}&")->fetch(true);
+                
+                if($invoices){
+                    foreach($invoices as $invoice){
+                        $invoice->value=str_price_invert($readjustment_value);
+                        $invoice->save2();
+                    }
+                }
+                
+                ////gravo na log
+                if($contract->contract_cod!=""){
+                    $cod = $contract->contract_cod;
+                }else{
+                    $cod = $contract->cod;
+                }
+                
+                $log = new Log();
+                $log->account_id = $this->user->account_id;
+                $log->user = $this->user->id;
+                $log->ip = $_SERVER["REMOTE_ADDR"];
+                $log->description = "Reajuste do contrato " . $cod;
+                $log->save();
+                     
+            }
             
             $this->message->info("Contraro reajustado com sucesso...")->flash();
             $json["redirect"] = url("/contrato/reajuste");
