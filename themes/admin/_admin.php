@@ -243,7 +243,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="pages/forms/advanced.html" class="nav-link">
+                                <a href="<?= $router->route("contract.renovation"); ?>" <?php if($submenu=="renovation"):?>class="nav-link active"<?php else:?>class="nav-link"<?php endif?>>
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Renovação</p>
                                 </a>

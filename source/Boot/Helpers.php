@@ -376,7 +376,7 @@ function validate_date(string $date): bool{
  * @param string $date
  * @return string
  */
-function return_date_readjustment(string $date): string{
+function return_date_convert(string $date): string{
    
     $date_part=substr($date , 0, 2);
     $date_part1=substr($date , 3, 4); 
@@ -384,6 +384,7 @@ function return_date_readjustment(string $date): string{
     return $date_part1."-".$date_part."-01";
      
 }
+
 /**
  * ####################
  * ###   PASSWORD   ###

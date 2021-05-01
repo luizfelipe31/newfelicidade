@@ -621,7 +621,7 @@ class ContractController extends Admin
             
             $date_readjustment = $data->date_readjustment;
             
-            $date_readjustment_convert = return_date_readjustment($data->date_readjustment);
+            $date_readjustment_convert = return_date_convert($data->date_readjustment);
                         
             if($data->readjustment_type!=""){
               $contracts = (new Contract())->find("status=1 and date_next_readjustment=:d and readjustment_type=:t and contract_situation='active' and account_id=:c","c={$this->user->account_id}&d={$date_readjustment_convert}&t={$readjustment_type}")->fetch(true);
@@ -744,6 +744,49 @@ class ContractController extends Admin
 
             echo json_encode($json);
             return;
+    }
+    
+    /**
+     * 
+     * @return void
+     */
+    public function renovation(?array $data): void {
+        
+        $get_date=date('Y-m');
+               
+        $contracts = (new Contract())->find("status=1 and DATE_FORMAT(end_date, '%Y-%m')=:d and renovation='manual' and account_id=:c","c={$this->user->account_id}&d={$get_date}")->fetch(true);
+        
+        $date_renovation = date("m/Y");
+             
+        if (!empty($data["action"]) && $data["action"] == "search") {
+            
+            $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+
+            $data = (object)$post;
+            
+            $date_renovation = $data->date_readjustment;
+            
+            $date_renovation_convert = return_date_convert($data->date_readjustment);
+
+            $contracts = (new Contract())->find("status=1 and end_date=:d and renovation='manual' and account_id=:c","c={$this->user->account_id}&d={$date_renovation_convert}")->fetch(true); 
+            
+        }
+        $head = $this->seo->render(
+            CONF_SITE_NAME . " | Renovação de Contrato",
+            CONF_SITE_DESC,
+            url("/"),
+            url("/assets/images/image.jpg"),
+            false
+        );
+
+        echo $this->view->render("contract/renovation", [
+            "head" => $head,
+            "menu" => "contract",
+            "submenu" => "renovation",
+            "contracts" => $contracts,
+            "date_renovation" => $date_renovation
+        ]);
+       
     }
     
     /**
