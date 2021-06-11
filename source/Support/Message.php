@@ -79,7 +79,7 @@ class Message {
      * @return string
      */
     public function render(): string {
-        return "<div class='message {$this->getType()}'>{$this->getText()}</div>";
+        return "{$this->getText()}";
     }
 
     /**

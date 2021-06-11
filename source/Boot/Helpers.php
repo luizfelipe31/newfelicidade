@@ -386,6 +386,22 @@ function return_date_convert(string $date): string{
 }
 
 /**
+ * converte data de reajuste
+ * @param string $date
+ * @return string
+ */
+function return_date_renovation(string $date): string{
+   
+    $date_part=substr($date , 0, 2);
+    $date_part1=substr($date , 3, 4);
+    
+
+    //return cal_days_in_month(CAL_GREGORIAN, $date_part , $date_part1);
+    return $date_part1."-".$date_part."-".cal_days_in_month(CAL_GREGORIAN, $date_part , $date_part1);
+     
+}
+
+/**
  * ####################
  * ###   PASSWORD   ###
  * ####################

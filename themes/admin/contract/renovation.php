@@ -57,6 +57,14 @@
                     <br>
                     <form action="<?= $router->route("contract.renovationDo"); ?>" method="post" >
                         <?= csrf_input(); ?>
+                        <div class="row">
+                            <div class="col-md-5">
+
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-success">Renovar</button>  
+                            </div>
+                        </div>
                         <input type="hidden" name="date_renovation_hiden" value="<?= $date_renovation ?>"/>
                         <input type="hidden" name="count_property" id="count_property" value="<?php echo count($contracts); ?>" />
                         <div class="card-body table-responsive p-0">
@@ -66,7 +74,7 @@
                                         <th>Imóvel</th>
                                         <th>Data de Início</th>
                                         <th>Data Fim</th>
-                                        <th>Valor</th>
+                                        <th>Aluguel</th>
                                         <th>Selecionar</th>
                                     </tr>
                                 </thead>
@@ -92,9 +100,9 @@
                                     <input type="hidden" class="form-control mask-money" name="readjustment_value_hidden_<?= ltrim($contract->cod); ?>" id="readjustment_value_hidden_<?= ltrim($i); ?>" value="<?= str_price($contract->lease_price); ?>">
                                     <tr>
                                         <td><?= $property; ?></td>
-                                        <td><?= $contract->readjustment_type; ?></td>
+                                        <td><?=date_fmt2($contract->start_date);?></td>
+                                        <td><?=date_fmt2($contract->end_date);?></td>
                                         <td>R$<?= str_price($contract->lease_price); ?></td>
-                                        <td><input type="text" class="form-control mask-money" name="readjustment_value_<?= ltrim($contract->cod); ?>" id="readjustment_value_<?= ltrim($i); ?>" placeholder="% Reajuste"></td>
                                         <td align="right">
                                             <div class="icheck-success d-inline">
                                                 <input type="checkbox" name="ch_contract[]" id="chSuccess_<?= ltrim($contract->cod); ?>" value="<?php echo ltrim($contract->cod)?>" class="mark">
@@ -128,6 +136,7 @@
     <!-- /.row -->
 </div>
 <?php $v->start("scripts"); ?>
+<script src="<?= url("/shared/scripts/contract_renovation.js"); ?>"></script>
 
 <?php if (!empty(flash())):
     ?>

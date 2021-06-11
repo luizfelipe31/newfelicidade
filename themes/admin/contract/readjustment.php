@@ -95,7 +95,7 @@
                                         <th>Imóvel</th>
                                         <th>Tipo de Reajuste</th>
                                         <th>Aluguel Atual</th>
-                                        <th>Valor</th>
+                                        <th>Valor do Reajuste</th>
                                         <th>Selecionar</th>
                                     </tr>
                                 </thead>

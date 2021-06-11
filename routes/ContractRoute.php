@@ -22,3 +22,4 @@ $router->post("/contrato/reajuste/do", "ContractController:readjustmentDo","cont
 /** Renovação **/
 $router->get("/contrato/renovacao", "ContractController:renovation","contract.renovation");
 $router->post("/contrato/renovacao", "ContractController:renovation","contract.renovation");
+$router->post("/contrato/renovacao/do", "ContractController:renovationDo","contract.renovationDo");

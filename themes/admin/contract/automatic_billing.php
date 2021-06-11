@@ -22,7 +22,6 @@
     <!-- Default box -->
     <div class="card card-solid">
         <div class="card-body pb-0">
-            <div class="row">
             <?php
             if($contracts):?>
                 <table id="example2" class="display" >
@@ -71,7 +70,7 @@
                     </tfoot>
                 </table>
             <?php endif;?>
-            </div><br>
+              <br>
             
         </div><!-- /.card-body pb-0 -->
     </div><!-- /.card card-solid -->

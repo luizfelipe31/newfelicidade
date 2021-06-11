@@ -61,7 +61,7 @@
       $companyLogo = ($logo ? image($logo, 100, 100) : "");
 ?>
 
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-footer-fixed">
 <div class="wrapper">
 
     <!-- Navbar -->
@@ -130,7 +130,7 @@
                     <img src="<?= $userPhoto; ?>" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="<?= url("/users/user/" . user()->id); ?>" class="d-block"><?= user()->fullName(); ?></a>
+                    <a href="<?= url("/usuario/alterar/" . user()->id); ?>" class="d-block"><?= user()->fullName(); ?></a>
                 </div>
             </div>
 
@@ -163,7 +163,7 @@
                             <li class="nav-item">
                                 <a href="<?= $router->route("dash.dash"); ?>" <?php if($submenu=="dash1"):?>class="nav-link active"<?php else:?>class="nav-link"<?php endif?>>
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Dashboard Estratégico</p>
+                                    <p>Dashboard Quantitativo</p>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -256,8 +256,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
+                    <li <?php if($menu=="financial"):?>class="nav-item menu-open"<?php else:?>class="nav-item"<?php endif?>>
+                        <a href="#" <?php if($menu=="financial"):?>class="nav-link active"<?php else:?>class="nav-link"<?php endif?>>
                             <i class="nav-icon fas fa-dollar-sign"></i>
                             <p>
                                 Financeiro
@@ -274,31 +274,38 @@
                             <li class="nav-item">
                                 <a href="pages/mailbox/compose.html" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
+                                    <p>Fluxo de Caixa</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <!--a href="<?= $router->route("wallet.home"); ?>" <?php if($submenu=="wallet"):?>class="nav-link active"<?php else:?>class="nav-link"<?php endif?>-->
+                                <a href="pages/mailbox/compose.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Conta Bancária</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= $router->route("wallet.home"); ?>" <?php if($submenu=="wallet"):?>class="nav-link active"<?php else:?>class="nav-link"<?php endif?>>
+                                    <i class="far fa-circle nav-icon"></i>
                                     <p>Carteira</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="pages/mailbox/compose.html" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Fluxo de Caixa</p>
+                                    <p>Lançar Cobranças</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="pages/mailbox/compose.html" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Contas a Receber</p>
+                                    <p>Lançar Despesas</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="pages/mailbox/compose.html" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Contas a Pagar</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages/mailbox/compose.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Repasse</p>
+                                    <p>Compensação</p>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -352,7 +359,7 @@
                             <li class="nav-item">
                                 <a href="pages/mailbox/compose.html" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Relatório de Envio</p>
+                                    <p>Registro de Envio</p>
                                 </a>
                             </li>
                         </ul>
@@ -370,6 +377,12 @@
                                 <a href="pages/charts/chartjs.html" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Relatório de Cliente</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/mailbox/compose.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Relatório de Repasse</p>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -391,6 +404,12 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a href="pages/charts/flot.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Relatório de Imposto</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="pages/charts/inline.html" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Relatório de Dimob</p>
@@ -400,9 +419,9 @@
                     </li>
                     <li <?php if($menu=="user"):?>class="nav-item menu-open"<?php else:?>class="nav-item"<?php endif?>>
                         <a href="#" <?php if($menu=="user"):?>class="nav-link active"<?php else:?>class="nav-link"<?php endif?>>
-                            <i class="nav-icon fas fa-suitcase"></i>
+                            <i class="nav-icon fas fa-address-card"></i>
                             <p>
-                                Minha Conta
+                                Meu Perfil
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
@@ -445,7 +464,7 @@
     <!--container-->
     <?= $v->section("content"); ?>
     <!-- /.container -->
-
+    <input type="text" id="flash" value="<?=flash()?>" />
     <footer class="main-footer">
         <strong>Copyright &copy; <?= date("Y"); ?> <a href="https://www.aegsoftware.com" target="_blank">A&GSoftware</a>.</strong>
         Todos os direitos reservados.

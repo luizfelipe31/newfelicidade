@@ -2,6 +2,10 @@
 
 $(function () {
 
+    if($("#flash").val()!==""){
+        toastr.success($("#flash").val());
+    }
+
     //DATA SET
 
     $("[data-post]").click(function (e) {

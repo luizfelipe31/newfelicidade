@@ -764,9 +764,9 @@ class ContractController extends Admin
 
             $data = (object)$post;
             
-            $date_renovation = $data->date_readjustment;
+            $date_renovation = $data->date_renovation;
             
-            $date_renovation_convert = return_date_convert($data->date_readjustment);
+            $date_renovation_convert = return_date_renovation($data->date_renovation);
 
             $contracts = (new Contract())->find("status=1 and end_date=:d and renovation='manual' and account_id=:c","c={$this->user->account_id}&d={$date_renovation_convert}")->fetch(true); 
             
@@ -789,6 +789,76 @@ class ContractController extends Admin
        
     }
     
+    /**
+     * Método que realiza o reajuste
+     * @param array $data
+     * @return void
+     */
+    public function renovationDo(array $data): void{
+
+        $data = filter_var_array($data, FILTER_SANITIZE_STRIPPED);
+        
+        if (!empty($data['csrf'])) {
+
+             if ($_REQUEST && !csrf_verify($_REQUEST)) {
+
+                 $json["message"] = "Erro ao enviar o formulário, atualize a página";
+                 echo json_encode($json);
+                 return;
+             }
+        }
+        
+        if(!isset($data["ch_contract"])){
+            $json["message"] = "Seleciona um contrato";
+            echo json_encode($json);
+            return; 
+        }
+
+        foreach($data["ch_contract"] as $ch_contract){
+        
+            $contract = (new Contract)->find("cod=:c","c={$ch_contract}")->fetch();
+
+            $contract->renovation = "renewed";
+            $contract->save2();
+
+            ////gravo na log
+            if($contract->contract_cod!=""){
+                $cod = $contract->contract_cod;
+            }else{
+                $cod = $contract->cod;
+            }
+
+            $contract_historic = new ContractHistoric();
+            $contract_historic->contract = $contract->id;
+            $contract_historic->lease_price = $contract->lease_price;
+            $contract_historic->commission = $contract->commission;
+            $contract_historic->readjustment_type = $contract->readjustment_type;
+            $contract_historic->lease_term = $contract->lease_term;
+            $contract_historic->due_date = $contract->due_date;
+            $contract_historic->paymento_form = $contract->paymento_form;
+            $contract_historic->date_next_readjustment = $contract->date_next_readjustment;
+            $contract_historic->status_historic = 1;
+            $contract_historic->status = 1;
+            $contract_historic->account_id = $this->user->account_id;
+            $contract_historic->save();
+            
+            $log = new Log();
+            $log->account_id = $this->user->account_id;
+            $log->user = $this->user->id;
+            $log->ip = $_SERVER["REMOTE_ADDR"];
+            $log->description = "Renovação do Contrato " . $cod;
+            $log->save();
+
+        }
+
+        $this->message->info("Contraro renovado com sucesso...")->flash();
+        $json["redirect"] = url("/contrato/renovacao");
+
+        echo json_encode($json);
+        return;
+
+    }
+
     /**
      * @param array $data
      */

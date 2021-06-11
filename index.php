@@ -15,6 +15,7 @@ require_once("routes/DashRoute.php");
 require_once("routes/UserRoute.php");
 require_once("routes/RegisterRoute.php");
 require_once("routes/ContractRoute.php");
+require_once("routes/FinancialRoute.php");
 require_once("routes/AuxRoute.php");
 
 /**
