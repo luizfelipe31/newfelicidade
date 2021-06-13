@@ -116,7 +116,7 @@
                     <div class="create">
                         <form action="<?= $router->route("wallet.edit"); ?>" name="gallery" method="post"
                               enctype="multipart/form-data">
-                              <input type="hidden" name="cod" id="cod" placeholder="Nome da Carteira:" required/>
+                              <input type="hidden" name="cod" id="cod"/>
                             <label>
                                 <input type="text" class="form-control" name="description_edit" id="description_edit" placeholder="Nome da Carteira:" required/>
                             </label>

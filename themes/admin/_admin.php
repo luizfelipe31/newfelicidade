@@ -278,8 +278,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <!--a href="<?= $router->route("wallet.home"); ?>" <?php if($submenu=="wallet"):?>class="nav-link active"<?php else:?>class="nav-link"<?php endif?>-->
-                                <a href="pages/mailbox/compose.html" class="nav-link">
+                                <a href="<?= $router->route("bankaccount.home"); ?>" <?php if($submenu=="bank_account"):?>class="nav-link active"<?php else:?>class="nav-link"<?php endif?>>
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Conta Bancária</p>
                                 </a>

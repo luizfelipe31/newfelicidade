@@ -104,7 +104,11 @@ class WalletController extends Admin
         }
 
         $wallet->description = $data->description_edit;
-        $wallet->save();
+        if (!$wallet->save()) {
+            $json["message"] = $wallet->fail()->getMessage();
+            echo json_encode($json);
+            return;
+        }
 
         $this->message->info("Carteira alterada com sucesso...")->flash();
         $json["redirect"] = url("/carteira");

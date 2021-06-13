@@ -10,7 +10,7 @@ $(function () {
 
     $("[data-post]").click(function (e) {
         e.preventDefault();
-
+        alert('entrou aqui');
         var clicked = $(this);
         var data = clicked.data();
         var load = $(".ajax_load");
@@ -108,7 +108,7 @@ $(function () {
         });
     });
 
-    /*$(".ajax_form").submit(function (e) {
+    $(".ajax_form").submit(function (e) {
         e.preventDefault();
 
         var form = $(this);
@@ -211,7 +211,7 @@ $(function () {
                 alert("Erro ao processar requisição");
             });
         }
-    });*/
+    });
 
 
     //TEXT
