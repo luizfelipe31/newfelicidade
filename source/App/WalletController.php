@@ -13,7 +13,7 @@ class WalletController extends Admin
 
     public function home(): void {
 
-        $wallets = (new Wallet)->find("status=1 and account_id=:c","c={$this->user->account_id}")->fetch(true);
+        $wallets = (new Wallet)->find("status=1 and account_id=:c","c={$this->user->account_id}")->order("id desc")->fetch(true);
         $main_wallet = (new Wallet)->find("id=1")->fetch();
         //var_dump($wallets);exit;
 

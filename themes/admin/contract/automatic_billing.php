@@ -124,6 +124,25 @@
                                 <label>Data da cobrança do primeiro aluguel:</label>
                                 <input type="text" class="form-control mask-date2" name="first_charge" placeholder="mm/yyyy" required/>
                             </div>
+                            <div class="col-md-6">
+                                <label>Conta Bancária:</label>
+                                <select class="form-control" style="width: 100%;" name="bank_account" required>
+                                    <option value="">--Selecione--</option>
+                                    <?php foreach ($bank_accounts as $bank_account): ?>
+                                           <option value="<?=$bank_account->id?>"><?=$bank_account->fullAccount()?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Carteira:</label>
+                                <select class="form-control" style="width: 100%;" name="wallet" required>
+                                    <option value="">--Selecione--</option>
+                                    <option value="<?=$main_wallet->id?>"><?=$main_wallet->description?></option>                                         
+                                    <?php foreach ($wallets as $wallet): ?>
+                                           <option value="<?=$wallet->id?>"><?=$wallet->description?></option>
+                                    <?php endforeach; ?>                                   
+                                </select>
+                            </div>
                             <br><br><br><br>
                             <div class="col-md-12">
                              <button class="btn btn-success"><i class="fas fa-edit"> Gerar</i></button>
@@ -138,15 +157,7 @@
 </div>
 
 <?php $v->start("scripts");
-if(!empty(flash())):
-    ?>
-    <script>
-        $(function () {
-            toastr.success("Alugueis gerados com sucesso.");
-        });
-    </script>
-<?php
-endif;
+
 if(!$contracts):
     ?>
     <script>

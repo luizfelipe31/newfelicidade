@@ -3,6 +3,7 @@
 namespace Source\App;
 
 use Source\Models\Bank;
+use Source\Models\BankAccount;
 use Source\Models\Client;
 use Source\Models\Property;
 use Source\Models\User;
@@ -13,9 +14,11 @@ use Source\Models\ContractProcurators;
 use Source\Models\Invoice;
 use Source\Models\Billet;
 use Source\Models\BilletInvoice;
+use Source\Models\Invoice_fixed;
 use Source\Models\Receipt;
 use Source\Models\ReceiptInvoice;
 use Source\Models\Log;
+use Source\Models\Wallet;
 use Source\Support\Upload;
 
 class ContractController extends Admin
@@ -486,6 +489,12 @@ class ContractController extends Admin
             }
             
             $start_date = date_datetime($due_day.'/'.$data->first_charge);
+
+            $invoice_fixed = new Invoice_fixed();
+            $invoice_fixed->category = 1;
+            $invoice_fixed->account_id = $this->user->account_id;
+            $invoice_fixed->status = 1;
+            $invoice_fixed->save();
                          
             for($i=1;$i<=960;$i++){
                 
@@ -496,17 +505,17 @@ class ContractController extends Admin
                 $clone2 = clone new \DateTime($due_date);   
                 $date2 = $clone2->modify( '-1 month');
                 $reference_date=$date2->format( "m/Y" ); 
-                
+
                 $invoice_create = new Invoice();
                 $invoice_create->value = str_replace([".", ","], ["", "."], $data->lease_price);
                 $invoice_create->operation = 1;
                 $invoice_create->category = 1;
-                $invoice_create->wallet = 1;
+                $invoice_create->wallet = $data->bank_account;
+                $invoice_create->bank_account_id = $data->wallet;
                 $invoice_create->reference_date = $reference_date;
                 $invoice_create->due_date = $due_date;
                 $invoice_create->contract = $contract->id;
-                $invoice_create->fixed = 1;
-                $invoice_create->recurrent = null;
+                $invoice_create->fixed = $invoice_fixed->id;
                 $invoice_create->status_comission = 1;
                 $invoice_create->status = 1;
                 $invoice_create->account_id = $this->user->account_id;
@@ -581,7 +590,10 @@ class ContractController extends Admin
            
         
         $contracts = (new Contract)->find("status=1 and automatic_billing=0 and contract_situation='active' and account_id=:c","c={$this->user->account_id}")->fetch(true);
-        
+        $accounts = (new BankAccount)->find("status=1 and account_id=:c","c={$this->user->account_id}")->order("id desc")->fetch(true);
+        $wallets = (new Wallet)->find("status=1 and account_id=:c","c={$this->user->account_id}")->order("id desc")->fetch(true);
+        $main_wallet = (new Wallet)->find("id=1")->fetch();
+
         $head = $this->seo->render(
             CONF_SITE_NAME . " | Gerar Alugueis de Contratos",
             CONF_SITE_DESC,
@@ -594,7 +606,10 @@ class ContractController extends Admin
             "head" => $head,
             "menu" => "contract",
             "submenu" => "automaticBilling",
-            "contracts" => $contracts
+            "contracts" => $contracts,
+            "bank_accounts" => $accounts,
+            "wallets" => $wallets,
+            "main_wallet" => $main_wallet
         ]);
     }
  

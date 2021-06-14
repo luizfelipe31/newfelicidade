@@ -15,8 +15,8 @@ class BankAccountController extends Admin
 
     public function home(): void {
 
-        $accounts = (new BankAccount)->find("status=1 and account_id=:c","c={$this->user->account_id}")->fetch(true);
-        $banks = (new Bank())->find("account_id=:account","account={$this->user->account_id}")->order("description")->fetch(true);
+        $accounts = (new BankAccount)->find("status=1 and account_id=:c","c={$this->user->account_id}")->order("id desc")->fetch(true);
+        $banks = (new Bank())->find("account_id=:account","account={$this->user->account_id}")->fetch(true);
         $type_accounts = (new TypeAccount())->find()->order("description")->fetch(true);
         
         $head = $this->seo->render(
