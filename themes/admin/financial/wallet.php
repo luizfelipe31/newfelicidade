@@ -52,7 +52,7 @@
                         <div class="inner">
                             <h3>R$500</h3>
 
-                            <p><a href="#" style="color:white;font-size:1.5em" id="wallet_delete" data-toggle="modal" data-target="#modalWalletEdit" data-value="<?=$wallet->description?>" data-cod="<?=$wallet->cod?>"><?=$wallet->description?></a></p>
+                            <p><a href="#" class="code-dialog" style="color:white;font-size:1.5em" id="wallet_delete" data-toggle="modal" data-target="#modalWalletEdit" data-value="<?=$wallet->description?>" data-cod="<?=$wallet->cod?>"><?=$wallet->description?></a></p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-dollar-sign"></i>
@@ -134,8 +134,7 @@
 
 <?php $v->start("scripts");?>
 <script>
-$( "#wallet_delete").click( function (e) {
-    e.preventDefault();
+$( ".code-dialog").click( function () {
     $( "#cod").val($(this).data('cod'));
     $( "#description_edit").val($(this).data('value'));
 })

@@ -24,8 +24,8 @@
     <div class="container-fluid">
         <div class="row mt-4 card">
             <div class="tab-content p-3" id="nav-tabContent">
-                <form action="<?= $router->route("contract.readjustment"); ?>" method="post" class="ajax_form">
-                    <input type="hidden" name="action" value="search"/>
+                <form action="<?= $router->route("contract.readjustmentSearch"); ?>" method="post">
+                    <input type="hidden" name="action" id="action" value="search"/>
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon"><label>Tipo de Reajuste:</label></span>

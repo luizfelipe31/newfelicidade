@@ -38,7 +38,7 @@
                         <div class="inner">
                             <h3>R$500</h3>
 
-                            <p><a href="#" style="color:white;font-size:1.5em" id="account_delete" data-toggle="modal" data-target="#modalAccountEdit"  data-bank="<?=$bank_account->bank?>" data-typeaccount="<?=$bank_account->type_account?>" data-agency="<?=$bank_account->agency?>" data-numberaccount="<?=$bank_account->number_account?>" data-pix="<?=$bank_account->pix?>" data-cod="<?=$bank_account->cod?>"><?=$bank_account->fullAccount()?></a></p>
+                            <p><a href="#" class="code-dialog" style="color:white;font-size:1.5em" id="account_delete" data-toggle="modal" data-target="#modalAccountEdit"  data-bank="<?=$bank_account->bank?>" data-typeaccount="<?=$bank_account->type_account?>" data-agency="<?=$bank_account->agency?>" data-numberaccount="<?=$bank_account->number_account?>" data-pix="<?=$bank_account->pix?>" data-cod="<?=$bank_account->cod?>"><?=$bank_account->fullAccount()?></a></p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-dollar-sign"></i>
@@ -216,7 +216,20 @@
     </div>
 <?php $v->start("scripts");?>
 <script>
-$( "#account_delete").click( function (e) {
+$( ".code-dialog" ).click(function(){
+    $( "#bank").val($(this).data('bank'));
+    $('#bank').trigger('change');
+
+    $( "#type_account").val($(this).data('typeaccount'));
+    $('#type_account').trigger('change');
+
+    $( "#cod").val($(this).data('cod'));
+    $( "#agency").val($(this).data('agency'));
+    $( "#number_account").val($(this).data('numberaccount'));
+    $( "#pix").val($(this).data('pix'));
+});
+
+/*$( "#account_delete").click( function (e) {
     e.preventDefault();
     
     $( "#bank").val($(this).data('bank'));
@@ -229,7 +242,7 @@ $( "#account_delete").click( function (e) {
     $( "#agency").val($(this).data('agency'));
     $( "#number_account").val($(this).data('numberaccount'));
     $( "#pix").val($(this).data('pix'));
-})
+})*/
 
     $('#close_bank').click(function (){
 

@@ -766,10 +766,10 @@ class ContractController extends Admin
             
             $date_renovation = $data->date_renovation;
             
-            $date_renovation_convert = return_date_renovation($data->date_renovation);
-
-            $contracts = (new Contract())->find("status=1 and end_date=:d and renovation='manual' and account_id=:c","c={$this->user->account_id}&d={$date_renovation_convert}")->fetch(true); 
-            
+            $date_renovation_end = return_date_renovation($data->date_renovation);
+            $date_renovation_start = return_date_convert($data->date_renovation);
+    
+            $contracts = (new Contract())->find("status=1 and end_date between :start and :end and renovation='manual' and account_id=:c","c={$this->user->account_id}&start={$date_renovation_start}&end={$date_renovation_end}")->fetch(true); 
         }
         $head = $this->seo->render(
             CONF_SITE_NAME . " | Renovação de Contrato",

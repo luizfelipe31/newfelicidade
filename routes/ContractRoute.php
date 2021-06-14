@@ -16,10 +16,10 @@ $router->post("/contrato/gerar-aluguel", "ContractController:automaticBilling","
 
 /** Reajuste **/
 $router->get("/contrato/reajuste", "ContractController:readjustment","contract.readjustment");
-$router->post("/contrato/reajuste", "ContractController:readjustment","contract.readjustmentSearch");
+$router->post("/contrato/reajusteSearch", "ContractController:readjustment","contract.readjustmentSearch");
 $router->post("/contrato/reajuste/do", "ContractController:readjustmentDo","contract.readjustmentDo");
 
 /** Renovação **/
 $router->get("/contrato/renovacao", "ContractController:renovation","contract.renovation");
-$router->post("/contrato/renovacao", "ContractController:renovation","contract.renovation");
+$router->post("/contrato/renovacaoSearch", "ContractController:renovation","contract.renovationSearch");
 $router->post("/contrato/renovacao/do", "ContractController:renovationDo","contract.renovationDo");

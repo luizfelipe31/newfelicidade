@@ -10,7 +10,7 @@ $(function () {
 
     $("[data-post]").click(function (e) {
         e.preventDefault();
-        alert('entrou aqui');
+   
         var clicked = $(this);
         var data = clicked.data();
         var load = $(".ajax_load");
@@ -61,6 +61,9 @@ $(function () {
     //FORMS
 
     $("form:not('.ajax_form')").submit(function (e) {
+        //if($("form:not('.ajax_form2')")){
+        if($("#action").val()!="search"){
+        
         e.preventDefault();
 
         var form = $(this);
@@ -106,6 +109,7 @@ $(function () {
 
 
         });
+        }
     });
 
     $(".ajax_form").submit(function (e) {
