@@ -296,7 +296,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="pages/mailbox/compose.html" class="nav-link">
+                                <a href="<?= $router->route("invoice.expense"); ?>" <?php if($submenu=="expense"):?>class="nav-link active"<?php else:?>class="nav-link"<?php endif?>>
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Lançar Despesas</p>
                                 </a>
