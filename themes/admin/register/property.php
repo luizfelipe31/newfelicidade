@@ -52,7 +52,7 @@
                                     $i++;
                               endforeach;?>
                             </td>
-                            <td><?=$property->contract=="free" ? "Livre" : "Em Contrato";?></td>
+                            <td><?=$property->contract=="free" ? "Livre" : "Alugado";?></td>
                             <td><?=$property->status==1 ? "<div style='color:green'>Ativo</div>" : "<div style='color:red'>Inativo</div>";?></td>
                             <td><a href="<?= url("/cadastro/imoveis/alterar/{$property->cod}"); ?>" class="btn btn-primary"><i class="fas fa-edit">Alterar</i></a></td>
                         </tr>

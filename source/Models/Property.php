@@ -184,6 +184,20 @@ class Property extends DataLayer
 
     }
 
+    public function lesseeProperty() {
+        $user = User::UserLog();
+        
+        $connect = Connect::getInstance();
+
+        $lessee = $connect->query("SELECT clients.id,CASE
+    WHEN person='natural_person' THEN CONCAT(first_name, ' ', last_name) ELSE company_name END AS name  FROM contract_lessees 
+        inner join clients on clients.id=contract_lessees.lessee
+        inner join contracts on contracts.id=contract_lessees.contract
+        inner join properties on properties.id=contracts.property
+   WHERE properties.id='{$this->id}' and contracts.status=1 and contract_lessees.status=1 and contract_lessees.account_id='{$user->account_id}' and contracts.account_id='{$user->account_id}' ORDER BY name");
+
+        return $lessee->fetchAll();
+    }
     public function showPhoto1(): ?string {
 
         if ($this->photo1 && file_exists(__DIR__ . "/../../" . CONF_UPLOAD_DIR . "/{$this->photo1}")) {

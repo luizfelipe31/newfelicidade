@@ -304,6 +304,12 @@
                             <li class="nav-item">
                                 <a href="pages/mailbox/compose.html" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
+                                    <p>Lançamentos Múltiplos</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/mailbox/compose.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
                                     <p>Compensação</p>
                                 </a>
                             </li>
@@ -644,6 +650,27 @@ var table = $('#example1').DataTable({
 
 
 var table = $('#example2').DataTable({
+    "ordering": false,
+    "paging": true,
+    "info": true,
+    "lengthChange": false,
+    "language": {
+        "search": "Procurar:",
+        "paginate": {
+            "first": "Primeiro",
+            "last": "Último",
+            "next": "Próximo",
+            "previous": "Anterior"
+        },
+        "zeroRecords": "Nenhum Registro Encontrado",
+        "info": "Mostrar página _PAGE_ de _PAGES_",
+        "infoEmpty": "Nenhum Registro Encontrado",
+        "infoFiltered": "(filtrar por _MAX_ total de registro)"
+    },
+    responsive: true
+});
+
+var table = $('#example2alt').DataTable({
     "ordering": false,
     "paging": true,
     "info": true,

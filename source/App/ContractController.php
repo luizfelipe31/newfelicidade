@@ -39,8 +39,8 @@ class ContractController extends Admin
      */
     public function home(): void {
 
-        $contracts = (new Contract)->find("status=1 and account_id=:c","c={$this->user->account_id}")->fetch(true);
-
+        $contracts = (new Contract)->find("status=1 and account_id=:c","c={$this->user->account_id}")->order("id desc")->fetch(true);
+ 
         $head = $this->seo->render(
             CONF_SITE_NAME . " | Contratos",
             CONF_SITE_DESC,

@@ -122,12 +122,12 @@ class Contract extends DataLayer  {
         
         $connect = Connect::getInstance();
 
-        $owners = $connect->query("SELECT clients.id,CASE
+        $lessee = $connect->query("SELECT clients.id,CASE
     WHEN person='natural_person' THEN CONCAT(first_name, ' ', last_name) ELSE company_name END AS name  FROM contract_lessees 
         inner join clients on clients.id=contract_lessees.lessee
    WHERE contract_lessees.contract='{$this->id}' and contract_lessees.status=1 and contract_lessees.account_id='{$user->account_id}' ORDER BY name");
 
-        return $owners->fetchAll();
+        return $lessee->fetchAll();
         
     }
     
