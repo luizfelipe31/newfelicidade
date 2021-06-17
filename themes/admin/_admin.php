@@ -310,7 +310,13 @@
                             <li class="nav-item">
                                 <a href="pages/mailbox/compose.html" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Compensação</p>
+                                    <p>Contas a Pagar</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/mailbox/compose.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Contas a Receber</p>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -325,19 +331,6 @@
                                     <p>Recibos</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="pages/mailbox/compose.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Remessa <i style="color:red">EM BREVE</i></p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages/mailbox/compose.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Retorno <i style="color:red">EM BREVE</i></p>
-                                </a>
-                            </li>
-
                         </ul>
                     </li>
                     <li class="nav-item">

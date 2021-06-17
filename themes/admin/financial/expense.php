@@ -49,7 +49,7 @@
                     <td>--</td>
                     <td>--</td>
                     <td>--</td>
-                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalExpense" class="fas fa-dollar-sign"></a></td>
+                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalExpense" data-property="0" class="fas fa-dollar-sign invoice_expense"></a></td>
                    </tr>
                    <?php if($properties):
                            foreach($properties as $property):
@@ -70,7 +70,7 @@
                         endforeach;
                         ?>
                     </td>
-                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalExpense" class="fas fa-dollar-sign"></a></td>
+                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalExpense" data-property="<?=$property->id?>" class="fas fa-dollar-sign invoice_expense"></a></td>
                    </tr>
                    <?php 
                            endforeach;
@@ -94,7 +94,7 @@
                    <tr>
                      <td><?=$client->fullName()?></td>
                      <td><?=($client->person=="natural_person")? "Física" : "Jurídica";?></td>
-                     <td align="center"><a href="#"  data-toggle="modal" data-target="#modalExpense" class="fas fa-dollar-sign"></a></td>
+                     <td align="center"><a href="#"  data-toggle="modal" data-target="#modalExpense" data-lessor="<?=$client->id?>" class="fas fa-dollar-sign invoice_expense"></a></td>
                    </tr>
                 <?php 
                            endforeach;
@@ -118,10 +118,13 @@
                     </button>
                 </div>
                <div class="modal-body">
+               <form action="<?= $router->route("invoice.expenseAdd"); ?>" enctype="multipart/form-data" method="post">
+                    <input type="hidden" name="lessor" id="lessor_value" />
+                    <input type="hidden" name="property" id="property_value" />
                     <div class="row">
                         <div class="col-md-6">
                             <label>Forma de Pagamento:</label>
-                            <select class="form-control" style="width: 100%;" name="paymento_form" id="paymento_form" required>
+                            <select class="form-control" style="width: 100%;" name="payment_form" id="paymento_form" required>
                                 <option value="">--Selecione--</option>
                                 <option value="billet">Boleto</option>                                         
                                 <option value="check">Cheque</option>
@@ -131,7 +134,7 @@
                         </div>
                         <div class="col-md-6">
                             <label>Conta Bancária:</label>
-                            <select class="form-control" style="width: 100%;" required name="bank_account" id="bank_account">
+                            <select class="form-control" style="width: 100%;" name="bank_account" id="bank_account" required>
                                 <option value="">--Selecione--</option>
                                 <?php  if(!empty($bank_accounts)):
                                         foreach ($bank_accounts as $bank_account):?>
@@ -152,7 +155,7 @@
                         </div>
                         <div class="col-md-6">
                             <label>Categoria:</label>
-                            <select class="form-control" style="width: 100%;" required name="bank_account" id="bank_account">
+                            <select class="form-control" style="width: 100%;" required name="category" id="category">
                                 <option value="">--Selecione--</option>
                                     <?php foreach ($categories as $category):?>
                                         <option value="<?=$category->id?>"><?=$category->description?></option>
@@ -184,19 +187,19 @@
                             <div class="form-group clearfix">
                                 <label>Única: </label>
                                 <div class="icheck-success d-inline">
-                                    <input type="checkbox" name="expense_type" checked id="checkboxSuccess1">
+                                    <input type="checkbox" name="expense_unique" checked id="checkboxSuccess1">
                                     <label for="checkboxSuccess1">
                                     </label>
                                 </div>
                                 <label>Fixa: </label>
                                 <div class="icheck-success d-inline">
-                                    <input type="checkbox" name="expense_type"  id="checkboxSuccess2">
+                                    <input type="checkbox" name="expense_fixed"  id="checkboxSuccess2">
                                     <label for="checkboxSuccess2">
                                     </label>
                                 </div>
                                 <label>Parcelado: </label>
                                 <div class="icheck-success d-inline">
-                                    <input type="checkbox" name="expense_type"  id="checkboxSuccess3">
+                                    <input type="checkbox" name="expense_installments"  id="checkboxSuccess3">
                                     <label for="checkboxSuccess3">
                                     </label>
                                 </div>
@@ -216,7 +219,7 @@
                     <div class="row">
                           <button class="btn btn-success btn-lg btn-block"><i class="fas fa-edit"> Cadastrar</i></button>
                     </div>
-
+                </form>
                 </div>
             </div>
         </div>

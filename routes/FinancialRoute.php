@@ -14,3 +14,4 @@ $router->get("/carteira/deletar/{cod}", "WalletController:delete","wallet.delete
 
 /**lançamento**/
 $router->get("/despesa", "InvoiceController:expense","invoice.expense");
+$router->post("/despesa/lancar", "InvoiceController:expenseAdd","invoice.expenseAdd");

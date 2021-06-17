@@ -508,6 +508,7 @@ class ContractController extends Admin
 
                 $invoice_create = new Invoice();
                 $invoice_create->value = str_replace([".", ","], ["", "."], $data->lease_price);
+                $invoice_create->payment_form = $data->paymento_form;
                 $invoice_create->operation = 1;
                 $invoice_create->category = 1;
                 $invoice_create->wallet = $data->bank_account;

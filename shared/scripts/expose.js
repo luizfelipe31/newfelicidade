@@ -54,4 +54,11 @@ $(function () {
             }
         }
     })
+
+    $( ".invoice_expense" ).click(function(){
+        $("#lessor_value").val("");
+        $("#property_value").val("");
+        $("#lessor_value").val($(this).data('lessor')) 
+        $("#property_value").val($(this).data('property')) 
+    });
 })
