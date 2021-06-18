@@ -30,8 +30,9 @@ class InvoiceController extends Admin
 
         $main_wallet = (new Wallet)->find("id=1")->fetch();
 
-        $categories = (new Category)->find("(status=1 and account_id is null) or (status=1 and account_id=:c)","c={$this->user->account_id}")->order("description asc")->fetch(true);
+        $categories = (new Category)->find("(status=1 and account_id is null and operation!='income') or (status=1 and account_id=:c and operation!='income')","c={$this->user->account_id}")->order("description asc")->fetch(true);
 
+        $categories_add = (new Category)->find("status=1 and account_id=:c","c={$this->user->account_id}")->order("description asc")->fetch(true);
 
         $head = $this->seo->render(
             CONF_SITE_NAME . " | Despesas",
@@ -50,7 +51,8 @@ class InvoiceController extends Admin
             "bank_accounts" => $bank_accounts,
             "wallets" => $wallets,
             "main_wallet" => $main_wallet,
-            "categories" => $categories
+            "categories" => $categories,
+            "categories_add" => $categories_add
         ]);
     }
 
@@ -79,6 +81,8 @@ class InvoiceController extends Admin
             $invoice_create->property = $data->property;
             $invoice_create->bank_account_id = $bank_account;
             $invoice_create->note = $data->note;
+            $invoice_create->account_id = $this->user->account_id;
+            $invoice_create->status = 1;
 
             if (!$invoice_create->save()) {
                 $json["message"] = $invoice_create->fail()->getMessage();

@@ -5,10 +5,12 @@ namespace Source\App;
 
 
 use Source\Models\Bank;
+use Source\Models\Category;
 use Source\Models\CivilStatus;
 use Source\Models\DocumentSecundaryComplement;
 use Source\Models\Genre;
 use Source\Models\Historic;
+use Source\Models\Invoice;
 use Source\Models\Nationality;
 use Source\Models\PlaceOfBirth;
 use Source\Models\Profession;
@@ -976,4 +978,123 @@ class Auxiliar extends Admin{
 
         echo json_encode(["historic" => $historicList]);
     }
+
+
+   /**
+     * @param array|null $data]
+     */
+    public function categoryInvoiceAdd(?array $data): void {
+
+        if(empty($data["category"])){
+            $callback["message"] = "Preencha os campos necessários";
+            echo json_encode($callback);
+            return;
+        }
+
+        $user = User::UserLog();
+
+        $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $data = (object) $post;
+
+        $count_category = (new Category())->find("description=:d and account_id=:account","d={$data->category}&account={$user->account_id}")->count();
+
+        if(!$count_category==0){
+            $callback["message"] = "Valor já cadastrado";
+            echo json_encode($callback);
+            return;
+        }
+
+        $comission = 0;
+        $extra_extract = 0;
+        $mandatory_collection = 0;
+        $income_tax = 0;
+
+        if(isset($data->comission)) {
+            $comission = 1;
+        }
+
+        if(isset($data->extra_extract)) {
+            $extra_extract = 1;
+        }
+
+        if(isset($data->mandatory_collection)) {
+            $mandatory_collection = 1;
+        }
+
+        if(isset($data->income_tax)) {
+            $income_tax = 1;
+        }
+
+        $category = new Category();
+
+        $category->description = str_title($data->category);
+        $category->operation = $data->operation;
+        $category->account_id = $user->account_id;
+        $category->comission = $comission;
+        $category->extra_extract = $extra_extract;
+        $category->mandatory_collection = $mandatory_collection;
+        $category->income_tax = $income_tax;
+        $category->status = 1;
+        
+        if(!$category->save()){
+            $callback["message"] = $category->fail()->getMessage();
+            echo json_encode($callback);
+            return;
+
+        }
+
+        $callback["auxs12"] = $this->view->render("register/fragments/category",["category" => $category]);
+        echo json_encode($callback);
+        return;
+
+    }
+
+    /**
+     * @param array|null $data
+     */
+    public function categoryInvoiceDelete(?array $data): void {
+
+        if(empty($data["id"])){
+            return;
+        }
+
+        $user = User::UserLog();
+
+        $id = filter_var($data["id"], FILTER_VALIDATE_INT);
+
+        $category = (new Category())->find("id=:id and account_id=:account","id={$id}&account={$user->account_id}")->fetch();
+
+
+        if($category){
+            $category->destroy();
+        }
+
+        $callback["remove"] = true;
+        echo json_encode($callback);
+ 
+    }
+
+    /**
+     *
+     */
+    public function categoryInvoiceSelect(){
+
+        $user = User::UserLog();
+
+        $categories = (new Category())->find("(status=1 and account_id is null and operation!='income') or (status=1 and account_id=:c and operation!='income')","c={$this->user->account_id}")->order("description")->fetch(true);
+
+        $categoryList = null;
+
+        foreach ($categories as $category) {
+
+            $categoryList[] = $category->data();
+        }
+
+        echo json_encode(["category" => $categoryList]);
+    }
+
+
+
+
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 17-Jun-2021 às 07:57
+-- Tempo de geração: 18-Jun-2021 às 06:22
 -- Versão do servidor: 10.4.19-MariaDB
 -- versão do PHP: 7.4.20
 
@@ -189,6 +189,11 @@ CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `cod` binary(36) NOT NULL DEFAULT uuid(),
   `description` varchar(250) NOT NULL,
+  `operation` varchar(50) NOT NULL,
+  `comission` tinyint(1) NOT NULL DEFAULT 0,
+  `extra_extract` tinyint(1) NOT NULL DEFAULT 0,
+  `mandatory_collection` tinyint(1) NOT NULL DEFAULT 0,
+  `income_tax` tinyint(1) NOT NULL DEFAULT 0,
   `account_id` int(11) DEFAULT NULL,
   `status` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -199,16 +204,17 @@ CREATE TABLE `categories` (
 -- Extraindo dados da tabela `categories`
 --
 
-INSERT INTO `categories` (`id`, `cod`, `description`, `account_id`, `status`, `created_at`, `updated_at`) VALUES
-(1, 0x36323565343865342d376338642d313165622d623365362d356363643562623862373938, 'Aluguel', NULL, 1, '2021-03-04 02:00:25', NULL),
-(2, 0x36386564653163382d376338642d313165622d623365362d356363643562623862373938, 'Condomínio', NULL, 1, '2021-03-04 02:00:36', NULL),
-(3, 0x38333662666663362d376338642d313165622d623365362d356363643562623862373938, 'IPTU', NULL, 1, '2021-03-04 02:01:21', NULL),
-(4, 0x39616131623432632d376338642d313165622d623365362d356363643562623862373938, 'Repasse', NULL, 1, '2021-03-04 02:02:00', NULL),
-(5, 0x61646231613366332d376338642d313165622d623365362d356363643562623862373938, 'Água', NULL, 1, '2021-03-04 02:02:32', NULL),
-(6, 0x62326330623566652d376338642d313165622d623365362d356363643562623862373938, 'Luz', NULL, 1, '2021-03-04 02:02:40', NULL),
-(7, 0x63623637366632332d376338642d313165622d623365362d356363643562623862373938, 'Gás', NULL, 1, '2021-03-04 02:03:22', NULL),
-(8, 0x65363566316335312d376338642d313165622d623365362d356363643562623862373938, 'Bombeiro', NULL, 1, '2021-03-04 02:04:07', NULL),
-(9, 0x62333334663763392d636535632d313165622d396238332d356363643562623862373938, 'Tarifa Doc/Ted', NULL, 1, '2021-03-04 02:04:07', NULL);
+INSERT INTO `categories` (`id`, `cod`, `description`, `operation`, `comission`, `extra_extract`, `mandatory_collection`, `income_tax`, `account_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 0x36323565343865342d376338642d313165622d623365362d356363643562623862373938, 'Aluguel', 'income', 1, 0, 0, 1, NULL, 1, '2021-03-04 02:00:25', '2021-06-18 02:37:31'),
+(2, 0x36386564653163382d376338642d313165622d623365362d356363643562623862373938, 'Condomínio', 'both', 0, 0, 0, 0, NULL, 1, '2021-03-04 02:00:36', '2021-06-18 02:38:38'),
+(3, 0x38333662666663362d376338642d313165622d623365362d356363643562623862373938, 'IPTU', 'both', 0, 0, 0, 0, NULL, 1, '2021-03-04 02:01:21', '2021-06-18 02:38:40'),
+(4, 0x39616131623432632d376338642d313165622d623365362d356363643562623862373938, 'Repasse', 'both', 0, 0, 0, 0, NULL, 1, '2021-03-04 02:02:00', '2021-06-18 02:38:42'),
+(5, 0x61646231613366332d376338642d313165622d623365362d356363643562623862373938, 'Água', 'both', 0, 0, 0, 0, NULL, 1, '2021-03-04 02:02:32', '2021-06-18 02:38:43'),
+(6, 0x62326330623566652d376338642d313165622d623365362d356363643562623862373938, 'Luz', 'both', 0, 0, 0, 0, NULL, 1, '2021-03-04 02:02:40', '2021-06-18 02:38:44'),
+(7, 0x63623637366632332d376338642d313165622d623365362d356363643562623862373938, 'Gás', 'both', 0, 0, 0, 0, NULL, 1, '2021-03-04 02:03:22', '2021-06-18 02:38:45'),
+(8, 0x65363566316335312d376338642d313165622d623365362d356363643562623862373938, 'Bombeiro', 'both', 0, 0, 0, 0, NULL, 1, '2021-03-04 02:04:07', '2021-06-18 02:38:49'),
+(9, 0x62333334663763392d636535632d313165622d396238332d356363643562623862373938, 'Tarifa Doc/Ted', 'both', 0, 0, 0, 0, NULL, 1, '2021-03-04 02:04:07', '2021-06-18 02:38:50'),
+(10, 0x64393532333433632d636665362d313165622d396334632d356363643562623862373938, 'Teste', 'both', 1, 0, 0, 0, 1, 1, '2021-06-18 03:39:55', '2021-06-18 03:44:39');
 
 -- --------------------------------------------------------
 
@@ -2080,7 +2086,8 @@ INSERT INTO `log` (`id`, `account_id`, `user`, `ip`, `description`, `created_at`
 (478, 1, 1, '::1', 'Lançamento de despesa 8 -- 150,00', '2021-06-17 05:48:11', '2021-06-17 05:48:11'),
 (479, 1, 1, '::1', 'Lançamento de despesa 8 -- 150,00', '2021-06-17 05:48:11', '2021-06-17 05:48:11'),
 (480, 1, 1, '::1', 'Lançamento de despesa  -- 122,30', '2021-06-17 05:51:48', '2021-06-17 05:51:48'),
-(481, 1, 1, '::1', 'Lançamento de despesa Água -- 122,33', '2021-06-17 05:55:56', '2021-06-17 05:55:56');
+(481, 1, 1, '::1', 'Lançamento de despesa Água -- 122,33', '2021-06-17 05:55:56', '2021-06-17 05:55:56'),
+(482, 1, 1, '::1', 'Usuário Luiz Felipe Azevedo Bello fez login no sistema', '2021-06-17 13:19:16', '2021-06-17 13:19:16');
 
 -- --------------------------------------------------------
 
@@ -4434,7 +4441,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `cod`, `first_name`, `last_name`, `email`, `user_name`, `password`, `level_id`, `account_id`, `status`, `forget`, `genre`, `datebirth`, `document`, `document2`, `photo`, `realtor`, `error_attempt`, `error_code`, `error_date`, `admin_account`, `created_at`, `updated_at`) VALUES
-(1, 0x66646264346532312d333364652d313165622d613061322d373466303664663066636462, 'Luiz Felipe', 'Azevedo Bello', 'luizfelipe31@gmail.com', 'admin', '$2y$10$/D0SF9Y/t33BNaeqptbdI.54CV5FKNukJ1hl1G3Wdm1yKUALS3Cti', 1, 1, 1, NULL, 'male', '1989-07-09', '14179893789', '241989185', 'images/2020/10/luiz-felipe-azevedo-bello-1603334942.jpg', 1, NULL, NULL, NULL, 0, '2020-08-27 15:56:03', '2021-06-16 14:21:57'),
+(1, 0x66646264346532312d333364652d313165622d613061322d373466303664663066636462, 'Luiz Felipe', 'Azevedo Bello', 'luizfelipe31@gmail.com', 'admin', '$2y$10$/D0SF9Y/t33BNaeqptbdI.54CV5FKNukJ1hl1G3Wdm1yKUALS3Cti', 1, 1, 1, NULL, 'male', '1989-07-09', '14179893789', '241989185', 'images/2020/10/luiz-felipe-azevedo-bello-1603334942.jpg', 1, NULL, NULL, NULL, 0, '2020-08-27 15:56:03', '2021-06-17 13:19:16'),
 (2, 0x66646334383337362d333364652d313165622d613061322d373466303664663066636462, 'Francisco', 'Araujo Filho', 'franciscoaraujofilho@gmail.com', NULL, '$2y$10$eUQYvXtx1feTPhSld97eL./gBqOjxrcGtMi6GdANs0g1qM3OBrVQW', 1, 1, 1, NULL, 'male', '1962-01-08', '12121212121', NULL, NULL, 1, NULL, NULL, NULL, 0, '2020-08-29 00:43:55', '2020-12-23 01:52:52'),
 (5, 0x66646334383838342d333364652d313165622d613061322d373466303664663066636462, 'A&G', 'Software', 'contato@aegsoftware.com', 'admin2', '$2y$10$S54juihUIPt3PVAbelBOKuMVhd.KFp2avPZbgrqgQPsGKGS8TnPXi', 1, 1, 1, NULL, 'male', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, 1, '2020-08-27 15:56:03', '2021-01-11 17:11:39'),
 (6, 0x66646334386233382d333364652d313165622d613061322d373466303664663066636462, 'Luiz', 'Felipe', 'luizfelipe@gmail.com', NULL, '$2y$10$JS/MzdusoO6TTUmnwMLK3O/B3Qy/enG09dOrSTZS9vIh8kTqUxl9O', 1, 1, 1, NULL, 'male', NULL, '', NULL, NULL, 0, NULL, NULL, NULL, 0, '2020-10-17 02:57:35', '2020-12-23 01:52:57'),
@@ -4758,7 +4765,7 @@ ALTER TABLE `billet_invoices`
 -- AUTO_INCREMENT de tabela `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de tabela `civil_status`
@@ -4848,7 +4855,7 @@ ALTER TABLE `levels`
 -- AUTO_INCREMENT de tabela `log`
 --
 ALTER TABLE `log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=482;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=483;
 
 --
 -- AUTO_INCREMENT de tabela `nationalities`

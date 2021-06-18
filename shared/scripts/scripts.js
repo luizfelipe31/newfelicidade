@@ -129,6 +129,7 @@ $(function () {
         var auxs9 = $(".auxs9");
         var auxs10 = $(".auxs10");
         var auxs11 = $(".auxs11");
+        var auxs12 = $(".auxs12");
 
         $.ajax({
             url: form.attr("action"),
@@ -190,6 +191,10 @@ $(function () {
 
                 if(callback.auxs11){
                     auxs11.prepend(callback.auxs11);
+                }
+
+                if(callback.auxs12){
+                    auxs12.prepend(callback.auxs12);
                 }
             },
             complete: function () {

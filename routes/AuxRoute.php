@@ -44,3 +44,7 @@ $router->get("/cadastro/type_property/select","Auxiliar:typePropertySelect","aux
 $router->post("/cadastro/historic", "Auxiliar:historicAdd","auxiliar.historicAdd");
 $router->post("/cadastro/historic/delete","Auxiliar:historicDelete","auxiliar.historicDelete");
 $router->get("/cadastro/historic/select","Auxiliar:historicSelect","auxiliar.historicSelect");
+
+$router->post("/cadastro/category", "Auxiliar:categoryInvoiceAdd","auxiliar.categoryInvoiceAdd");
+$router->post("/cadastro/category/delete","Auxiliar:categoryInvoiceDelete","auxiliar.categoryInvoiceDelete");
+$router->get("/cadastro/category/select","Auxiliar:categoryInvoiceSelect","auxiliar.categoryInvoiceSelect");

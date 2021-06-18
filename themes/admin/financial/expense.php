@@ -49,10 +49,11 @@
                     <td>--</td>
                     <td>--</td>
                     <td>--</td>
-                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalExpense" data-property="0" class="fas fa-dollar-sign invoice_expense"></a></td>
+                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalExpense" data-property="0" data-label="Administradora de Imóvel" class="fas fa-dollar-sign invoice_expense"></a></td>
                    </tr>
                    <?php if($properties):
                            foreach($properties as $property):
+                             $propertie_label = "<b>Imóvel: </b>".$property->street." ".$property->number." ".$property->complement.", ".$property->district." - ".$property->state." - ".$property->city;
                     ?>
                    <tr>
                     <td><?=$property->street." ".$property->number." ".$property->complement.", ".$property->district." - ".$property->state." - ".$property->city;?></td>
@@ -70,7 +71,7 @@
                         endforeach;
                         ?>
                     </td>
-                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalExpense" data-property="<?=$property->id?>" class="fas fa-dollar-sign invoice_expense"></a></td>
+                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalExpense" data-property="<?=$property->id?>" data-label="<?=$propertie_label?>" class="fas fa-dollar-sign invoice_expense"></a></td>
                    </tr>
                    <?php 
                            endforeach;
@@ -90,11 +91,12 @@
                 <tbody>
                 <?php if($clients):
                            foreach($clients as $client):
+                            $cliente_label = "<b>Locador:</b> ".$client->fullName();
                     ?>
                    <tr>
                      <td><?=$client->fullName()?></td>
                      <td><?=($client->person=="natural_person")? "Física" : "Jurídica";?></td>
-                     <td align="center"><a href="#"  data-toggle="modal" data-target="#modalExpense" data-lessor="<?=$client->id?>" class="fas fa-dollar-sign invoice_expense"></a></td>
+                     <td align="center"><a href="#"  data-toggle="modal" data-target="#modalExpense" data-lessor="<?=$client->id?>" data-label="<?=$cliente_label?>" class="fas fa-dollar-sign invoice_expense"></a></td>
                    </tr>
                 <?php 
                            endforeach;
@@ -118,6 +120,7 @@
                     </button>
                 </div>
                <div class="modal-body">
+               <div align="center" id="label_desc"></div><br>
                <form action="<?= $router->route("invoice.expenseAdd"); ?>" enctype="multipart/form-data" method="post">
                     <input type="hidden" name="lessor" id="lessor_value" />
                     <input type="hidden" name="property" id="property_value" />
@@ -154,7 +157,7 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label>Categoria:</label>
+                            <label>Categoria:<i class="far fa-question-circle"  style="cursor:pointer" data-toggle="modal" data-target="#modalCategory"></i></label>
                             <select class="form-control" style="width: 100%;" required name="category" id="category">
                                 <option value="">--Selecione--</option>
                                     <?php foreach ($categories as $category):?>
@@ -225,6 +228,85 @@
         </div>
     </div>
 
+    <!--modal category-->
+    <div class="modal fade" id="modalCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="category">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Categoria</h5>
+                    <button type="button" class="close" id="close_category" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                   <div class="create">
+                    <form class="ajax_form" action="<?= $router->route("auxiliar.categoryInvoiceAdd"); ?>" name="gallery" method="post"
+                            enctype="multipart/form-data">
+                
+                        <label>
+                            <input type="text" class="form-control" name="category" required placeholder="Categoria:"/>
+                        </label>
+                        <label>
+                            <select class="form-control" style="width: 100%;" required name="operation" id="operation">
+                                <option value="">--Tipo da categoria--</option>
+                                <option value="income">Crédito</option>
+                                <option value="expense">Débito</option>
+                                <option value="both">Ambos</option>                         
+                            </select>
+                        </label>
+                        <div>
+                            <div class="col-sm-12">
+                                <!-- checkbox -->
+                                <div class="form-group clearfix">
+                                    <label>Comissionado: </label>
+                                    <div class="icheck-success d-inline">
+                                        <input type="checkbox" name="comission" checked id="checkboxComission">
+                                        <label for="checkboxComission">
+                                        </label>
+                                    </div><br>
+                                    <label>Extra Extrato: </label>
+                                    <div class="icheck-success d-inline">
+                                        <input type="checkbox" name="extra_extract"  id="checkboxExtraExtract">
+                                        <label for="checkboxExtraExtract">
+                                        </label>
+                                    </div><br>
+                                    <label>Carnê-leão: </label>
+                                    <div class="icheck-success d-inline">
+                                        <input type="checkbox" name="mandatory_collection"  id="checkboxMandatoryCollection">
+                                        <label for="checkboxMandatoryCollection">
+                                        </label>
+                                    </div><br>
+                                    <label>IR: </label>
+                                    <div class="icheck-success d-inline">
+                                        <input type="checkbox" name="income_tax"  id="checkboxIncomeTax">
+                                        <label for="checkboxIncomeTax">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>                 
+                        </div> <br>
+                        <div align="left" >
+                            <button class="btn btn-success"><i class="fas fa-edit"> Adicionar Novo</i></button>
+                        </div>                       
+                    </form>
+                   </div>
+                    <main class="content">
+                        <section class="auxs12">
+                            <?php 
+                                if($categories_add):
+                                    foreach ($categories_add as $category_add):
+                                        $v->insert("register/fragments/category",["category" => $category_add]);
+                                    endforeach;
+                                endif;
+                            ?>
+                        </section>
+                    </main>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
 <?php $v->start("scripts");  ?>
 <script src="<?= url("/shared/scripts/expose.js"); ?>"></script>
 <?php $v->end(); ?>

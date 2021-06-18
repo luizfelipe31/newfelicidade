@@ -79,4 +79,5 @@ class Invoice extends DataLayer   {
     public function categoryDesc(): ?Category {
         return (new Category())->findById($this->category);
     }
+
 }
