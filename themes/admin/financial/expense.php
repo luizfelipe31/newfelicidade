@@ -49,7 +49,7 @@
                     <td>--</td>
                     <td>--</td>
                     <td>--</td>
-                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalExpense" data-property="0" data-label="Administradora de Imóvel" class="fas fa-dollar-sign invoice_expense"></a></td>
+                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalExpense" data-property="0" data-label="Administradora de Imóvel" class="fas fa-dollar-sign invoice_expense" style="color:red"></a></td>
                    </tr>
                    <?php if($properties):
                            foreach($properties as $property):
@@ -71,7 +71,7 @@
                         endforeach;
                         ?>
                     </td>
-                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalExpense" data-property="<?=$property->id?>" data-label="<?=$propertie_label?>" class="fas fa-dollar-sign invoice_expense"></a></td>
+                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalExpense" data-property="<?=$property->id?>" data-label="<?=$propertie_label?>" class="fas fa-dollar-sign invoice_expense" style="color:red"></a></td>
                    </tr>
                    <?php 
                            endforeach;
@@ -96,7 +96,7 @@
                    <tr>
                      <td><?=$client->fullName()?></td>
                      <td><?=($client->person=="natural_person")? "Física" : "Jurídica";?></td>
-                     <td align="center"><a href="#"  data-toggle="modal" data-target="#modalExpense" data-lessor="<?=$client->id?>" data-label="<?=$cliente_label?>" class="fas fa-dollar-sign invoice_expense"></a></td>
+                     <td align="center"><a href="#"  data-toggle="modal" data-target="#modalExpense" data-lessor="<?=$client->id?>" data-label="<?=$cliente_label?>" class="fas fa-dollar-sign invoice_expense" style="color:red"></a></td>
                    </tr>
                 <?php 
                            endforeach;
@@ -114,7 +114,7 @@
         <div class="modal-dialog modal-lg" role="expense">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Lançar Despesa</h5>
+                    <h5 class="modal-title" id="exampleModalLabel" style="color:red">Lançar Despesa</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -189,19 +189,19 @@
                             <!-- checkbox -->
                             <div class="form-group clearfix">
                                 <label>Única: </label>
-                                <div class="icheck-success d-inline">
+                                <div class="icheck-danger d-inline">
                                     <input type="checkbox" name="expense_unique" checked id="checkboxSuccess1">
                                     <label for="checkboxSuccess1">
                                     </label>
                                 </div>
                                 <label>Fixa: </label>
-                                <div class="icheck-success d-inline">
+                                <div class="icheck-danger d-inline">
                                     <input type="checkbox" name="expense_fixed"  id="checkboxSuccess2">
                                     <label for="checkboxSuccess2">
                                     </label>
                                 </div>
                                 <label>Parcelado: </label>
-                                <div class="icheck-success d-inline">
+                                <div class="icheck-danger d-inline">
                                     <input type="checkbox" name="expense_installments"  id="checkboxSuccess3">
                                     <label for="checkboxSuccess3">
                                     </label>

@@ -178,4 +178,22 @@ class InvoiceController extends Admin
         echo json_encode($json);
         return;
     }
+
+    public function compensation(): void {
+    
+        $head = $this->seo->render(
+            CONF_SITE_NAME . " | Compensação",
+            CONF_SITE_DESC,
+            url("/"),
+            url("/assets/images/image.jpg"),
+            false
+        );
+
+        echo $this->view->render("financial/compensation", [
+            "head" => $head,
+            "menu" => "financial",
+            "submenu" => "compensation"
+        ]);
+    }
+    
 }

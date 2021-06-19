@@ -22,7 +22,7 @@ define("DATA_LAYER_CONFIG", [
  * PROJECT URLs
  */
 define("CONF_URL_BASE", "http://localhost/newfelicidade");
-define("CONF_URL", "https://www.aegsoftware.com/felicidade");
+define("CONF_URL", "http://localhost/newfelicidade");
 
 /**
  * SITE

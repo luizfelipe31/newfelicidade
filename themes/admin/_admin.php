@@ -308,15 +308,9 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="pages/mailbox/compose.html" class="nav-link">
+                                <a href="<?= $router->route("invoice.compensation"); ?>" <?php if($submenu=="compensation"):?>class="nav-link active"<?php else:?>class="nav-link"<?php endif?>>
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Contas a Pagar</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages/mailbox/compose.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Contas a Receber</p>
+                                    <p>Compensação</p>
                                 </a>
                             </li>
                             <li class="nav-item">

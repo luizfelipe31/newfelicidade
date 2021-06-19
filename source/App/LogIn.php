@@ -26,7 +26,18 @@ class LogIn extends Controller {
         if ($user) {
             redirect("/dash");
         } else {
-            redirect("/login");
+
+			$head = $this->seo->render(
+					CONF_SITE_NAME . " | Login",
+					CONF_SITE_DESC,
+					url("/"),
+					theme("assets/images/image.jpg", CONF_VIEW_THEME_ADMIN),
+					false
+			);
+
+			echo $this->view->render("login/login", [
+				"head" => $head
+			]);
         }
     }
 
