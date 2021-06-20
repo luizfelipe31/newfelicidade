@@ -60,8 +60,7 @@
 
             </div><!-- /.tab-content p-3-->
         </div><!-- /.row mt-4 card-->
-    </div><!-- /.container-fluid-->
-
+   
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -155,7 +154,7 @@
         </div>
     </div>
     <!-- /.row -->
-
+  </div><!-- /.container-fluid-->
 </div><!-- /.content-wrapper-->
 
 

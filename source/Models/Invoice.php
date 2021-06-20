@@ -9,7 +9,7 @@
 namespace Source\Models;
 
 use CoffeeCode\DataLayer\DataLayer;
-
+use CoffeeCode\DataLayer\Connect;
 /**
  * Description of Invoice
  *
@@ -80,4 +80,62 @@ class Invoice extends DataLayer   {
         return (new Category())->findById($this->category);
     }
 
+    public function paymenteForm(): ?string {
+
+        switch ($this->payment_form) {
+            case "billet":
+                return "Boleto";
+                break;
+            case "check":
+                return "Cheque";
+                break;
+            case "bank_deposit":
+                return "Depósito Bancário";
+                break;
+            case "money":
+                return "Dinheiro";
+                break;
+        }
+    }
+
+    public function typeInvoice(): ?string {
+
+        $var = "Lançamento Único";
+
+        if($this->fixed!="") {
+            $var = "Lançamento Fixo";
+        }
+
+        if($this->fixed!="") {
+            $var = "Lançamento Recorrente";
+        }
+
+        return $var;
+    }
+
+    public function propertyDesc(): ?Property {
+        if($this->property){
+          return (new Property())->findById($this->property);
+        }
+        return null;
+    }
+
+    public function clientDesc(): ?Client {
+        if($this->lessor){
+          return (new Client())->findById($this->lessor);
+        }
+        return null;
+    }
+
+    public function contractDesc() {
+        $user = User::UserLog();
+
+        $connect = Connect::getInstance();
+
+        $property = $connect->query("SELECT * from contracts inner join properties
+        on properties.id=contracts.property
+        where contracts.id='{$this->contract}' and contracts.account_id='{$user->account_id}' ");
+
+        return $property->fetch();
+    }
 }

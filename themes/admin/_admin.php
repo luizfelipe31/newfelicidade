@@ -272,12 +272,6 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="pages/mailbox/compose.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Fluxo de Caixa</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
                                 <a href="<?= $router->route("bankaccount.home"); ?>" <?php if($submenu=="bank_account"):?>class="nav-link active"<?php else:?>class="nav-link"<?php endif?>>
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Conta Bancária</p>
@@ -635,6 +629,58 @@ var table = $('#example1').DataTable({
     responsive: true
 });
 
+var table = $('#example1alt').DataTable({
+    "ordering": true,
+    "paging": true,
+    "info": true,
+    "lengthChange": true,
+    "language": {
+        "search": "Procurar:",
+        "paginate": {
+            "first": "Primeiro",
+            "last": "Último",
+            "next": "Próximo",
+            "previous": "Anterior"
+        },
+        "lengthMenu": "_MENU_ Resultados por página",
+        "zeroRecords": "Nenhum Registro Encontrado",
+        "info": "Mostrar página _PAGE_ de _PAGES_",
+        "infoEmpty": "Nenhum Registro Encontrado",
+        "infoFiltered": "(filtrar por _MAX_ total de registro)"
+    },
+    dom: 'Blfrtip',
+    buttons: [
+        {
+            extend: 'print',
+            text: 'Imprimir',
+            footer: true,
+            exportOptions: {
+                columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+            },
+            /*customize: function ( win ) {
+                $(win.document.body)
+                    .css( 'font-size', '10pt' )
+                    .prepend(
+                        '<img src="<?=$companyLogo;?>" style="position:absolute; top:0; left:20;" />'
+                    );
+
+                $(win.document.body).find( 'table' )
+                    .addClass( 'compact' )
+                    .css( 'font-size', 'inherit' );
+            }*/
+        },
+        {
+          extend: 'excel',
+          footer: true,
+          exportOptions: {
+                columns: [  0, 1, 2, 3, 4, 5, 6, 7 ]
+          },
+
+        },
+    ],
+
+    responsive: true
+});
 
 var table = $('#example2').DataTable({
     "ordering": false,

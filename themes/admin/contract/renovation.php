@@ -25,7 +25,7 @@
             <div class="tab-content p-3" id="nav-tabContent">
                 <form action="<?= $router->route("contract.renovationSearch"); ?>" method="post">
                     <input type="hidden" name="action" id="action" value="search"/>
-                    <div class="form-group">
+                    <div class="form-group col-md-4">
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <label>Data:</label>
@@ -43,8 +43,7 @@
 
             </div><!-- /.tab-content p-3-->
         </div><!-- /.row mt-4 card-->
-    </div><!-- /.container-fluid-->    
-    
+       
 
     <div class="row">
         <div class="col-12">
@@ -134,6 +133,7 @@
         </div>
     </div>
     <!-- /.row -->
+  </div><!-- /.container-fluid--> 
 </div>
 <?php $v->start("scripts"); ?>
 <script src="<?= url("/shared/scripts/contract_renovation.js"); ?>"></script>

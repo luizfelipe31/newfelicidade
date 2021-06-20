@@ -181,6 +181,11 @@ class InvoiceController extends Admin
 
     public function compensation(): void {
     
+        $date_start = return_date_convert(date("m/Y"));
+        $date_end = return_date_renovation(date("m/Y"));
+
+        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true);
+
         $head = $this->seo->render(
             CONF_SITE_NAME . " | Compensação",
             CONF_SITE_DESC,
@@ -192,7 +197,10 @@ class InvoiceController extends Admin
         echo $this->view->render("financial/compensation", [
             "head" => $head,
             "menu" => "financial",
-            "submenu" => "compensation"
+            "submenu" => "compensation",
+            "invoices" => $invoices,
+            "date_start" => $date_start,
+            "date_end" => $date_end
         ]);
     }
     
