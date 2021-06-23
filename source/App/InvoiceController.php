@@ -179,12 +179,66 @@ class InvoiceController extends Admin
         return;
     }
 
-    public function compensation(): void {
+    public function compensation(?array $data): void {
     
         $date_start = return_date_convert(date("m/Y"));
         $date_end = return_date_renovation(date("m/Y"));
+        $type="all";
+        $operation="both";
 
         $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true);
+
+        if (!empty($data["action"]) && $data["action"] == "search") {
+
+            $post = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+
+            $data = (object)$post;
+
+            $date_start = date_fmt_back($data->date_start);
+            $date_end = date_fmt_back($data->date_end);
+
+        
+            if($data->operation!="both"){
+      
+                $operation=$data->operation;
+
+                if($data->type!="all"){
+                    $type=$data->type;
+                    if($type=="adm"){
+                        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and operation=:o and lessor=0 and property=0 and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}&o={$data->operation}")->fetch(true); 
+                    }
+                    if($type=="property"){
+                        $invoices = (new Invoice)->find("(status=1 and due_date between :s and :e and operation=:o and lessor=0 and property!=0 and account_id=:c) or (status=1 and due_date between :s and :e and operation=:o and contract is not null and account_id=:c) ","c={$this->user->account_id}&s={$date_start}&e={$date_end}&o={$data->operation}")->fetch(true); 
+                    }
+                    if($type=="lessor"){
+                        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and operation=:o and lessor!=0 and property=0 and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}&o={$data->operation}")->fetch(true); 
+                    }
+                    
+                }else{
+                    $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and operation=:o and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}&o={$data->operation}")->fetch(true); 
+                }
+
+            }else{
+
+                if($data->type!="all"){
+                    $type=$data->type;
+                    if($type=="adm"){
+                        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and lessor=0 and property=0 and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true); 
+                    }
+                    if($type=="property"){
+                        $invoices = (new Invoice)->find("(status=1 and due_date between :s and :e and lessor=0 and property!=0 and account_id=:c) or (status=1 and due_date between :s and :e and contract is not null and account_id=:c)","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true); 
+                    }
+                    if($type=="lessor"){
+                        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and lessor!=0 and property=0 and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true); 
+                    }
+                }else{
+                    $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true);
+                } 
+
+            }
+
+            
+        }
 
         $head = $this->seo->render(
             CONF_SITE_NAME . " | Compensação",
@@ -200,7 +254,9 @@ class InvoiceController extends Admin
             "submenu" => "compensation",
             "invoices" => $invoices,
             "date_start" => $date_start,
-            "date_end" => $date_end
+            "date_end" => $date_end,
+            "operation" => $operation,
+            "type" => $type
         ]);
     }
     

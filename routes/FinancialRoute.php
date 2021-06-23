@@ -18,3 +18,4 @@ $router->post("/despesa/lancar", "InvoiceController:expenseAdd","invoice.expense
 
 /**Contas a pagar**/
 $router->get("/compensacao", "InvoiceController:compensation","invoice.compensation");
+$router->post("/compensacao", "InvoiceController:compensation","invoice.compensationSearch");

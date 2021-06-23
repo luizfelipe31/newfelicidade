@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0"><i class="fas fa-dollar-sign"></i> Contas a Pagar</h1>
+                    <h1 class="m-0"><i class="fas fa-dollar-sign"></i> Compensação</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -23,9 +23,34 @@
     <div class="container-fluid">
         <div class="row mt-4 card">
             <div class="tab-content p-3" id="nav-tabContent">
-                <form>
+                <form action="<?= $router->route("invoice.compensationSearch"); ?>" method="post">
+                    <input type="hidden" name="action" id="action" value="search"/>
                     <div class="row">
-                       <div class="col-md-6"></div>
+                       <label>Vencimento:</label>
+                       <div class="col-md-2">
+                         <input type="text" class="form-control mask-date" name="date_start" value="<?=date_fmt2($date_start)?>" placeholder="dd/mm/yyyy"/>
+                       </div> a
+                       <div class="col-md-2">
+                        <input type="text" class="form-control mask-date" name="date_end" value="<?=date_fmt2($date_end)?>" placeholder="dd/mm/yyyy"/>
+                       </div>
+                       <label>Operação:</label>
+                       <div class="col-md-2">
+                            <select class="form-control" style="width: 100%;" name="operation">
+                                <option <?php if($operation=="both"): echo"selected"; endif;?> value="both">Crédito e Débito</option>
+                                <option <?php if($operation=="1"): echo"selected"; endif;?> value="1">Crédito</option>
+                                <option <?php if($operation=="2"): echo"selected"; endif;?> value="2">Débito</option>
+                            </select>
+                       </div>
+                       <label>Por:</label>
+                       <div class="col-md-2">
+                            <select class="form-control" style="width: 100%;" name="type">
+                                <option <?php if($type=="all"): echo"selected"; endif;?> value="all">Todos</option>
+                                <option <?php if($type=="adm"): echo"selected"; endif;?> value="adm">Administradora de Imóvel</option>
+                                <option <?php if($type=="property"): echo"selected"; endif;?> value="property">Imóvel</option>
+                                <option <?php if($type=="lessor"): echo"selected"; endif;?> value="lessor">Locador</option>
+                            </select>
+                       </div>
+                       <button class="btn btn-primary"><i class="fas fa-search"> Pesquisar</i></button>
                     </div>
                 </form>
             </div><!-- /.tab-content p-3-->
@@ -126,3 +151,15 @@
             </div>
     </div><!-- /.container-fluid-->
 </div><!-- /.content-wrapper-->
+
+<?php $v->start("scripts");
+if(!$invoices):
+    ?>
+    <script>
+        $(function () {
+            toastr.error("Nenhum cliente encontrado");
+        });
+    </script>
+<?php
+endif;
+$v->end(); ?>
