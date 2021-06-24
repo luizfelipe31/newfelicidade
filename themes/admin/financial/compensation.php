@@ -73,9 +73,9 @@
                                             <th>Categoria</th>
                                             <th>Operação</th>
                                             <th>Tipo</th>
-                                            <th>Forma de Pagamento</th>
+                                            <th>Carteira</th>
+                                            <th>Conta Bancária</th>
                                             <th>Vencimento</th>
-                                            <th>Referência</th>
                                             <th>Valor</th>
                                             <th>Alterar</th>
                                             <th>Baixa</th>
@@ -112,12 +112,12 @@
                                             <td><?=$invoice->categoryDesc()->description;?></td>
                                             <td><?=($invoice->operation==1) ? "Crédito" : "Débito"?></td>
                                             <td><?=$invoice->typeInvoice()?></td>
-                                            <td><?=$invoice->paymenteForm()?></td>
+                                            <td><?=$invoice->walltetDesc()->description?></td>
+                                            <td><?=($invoice->bank_account_id==0)? "Pagamento em Dinheiro"  : " Conta ".$invoice->bankDesc()->type_account." ".$invoice->bankDesc()->bank." Ag:".$invoice->bankDesc()->agency." Conta:".$invoice->bankDesc()->number_account;?></td>
                                             <td><?=date_fmt2($invoice->due_date)?></td>
-                                            <td><?=$invoice->reference_date?></td>
                                             <td><div <?=($invoice->operation==1) ? "style='color:green'" : "style='color:red'"?>><?=str_price($invoice->value)?></div></td>
-                                            <td><a href="#" class="fas fa-edit invoice_expense" <?=($invoice->operation==1) ? "style='color:green'" : "style='color:red'"?>></a></td>
-                                            <td><a href="#" class="fas fa-dollar-sign invoice_expense" <?=($invoice->operation==1) ? "style='color:green'" : "style='color:red'"?>></a></td>
+                                            <td><a href="#" data-toggle="modal" data-target="#modalExpense" class="fas fa-edit invoice_expense" <?=($invoice->operation==1) ? "style='color:green'" : "style='color:red'"?>></a></td>
+                                            <td><a href="#" data-toggle="modal" data-target="#modalCompensation" class="fas fa-dollar-sign invoice_expense" <?=($invoice->operation==1) ? "style='color:green'" : "style='color:red'"?>></a></td>
                                         </tr>
                                       <?php 
                                             if($invoice->operation==1):
@@ -151,8 +151,223 @@
             </div>
     </div><!-- /.container-fluid-->
 </div><!-- /.content-wrapper-->
+    <!--modal Expense-->
+    <div class="modal fade" id="modalExpense" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="expense">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Alterar Lançamento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+               <div class="modal-body">
+               <div align="center" id="label_desc"></div><br>
+               <form action="<?= $router->route("invoice.expenseAdd"); ?>" enctype="multipart/form-data" method="post">
+                    <input type="hidden" name="lessor" id="lessor_value" />
+                    <input type="hidden" name="property" id="property_value" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Forma de Pagamento:</label>
+                            <select class="form-control" style="width: 100%;" name="payment_form" id="paymento_form" required>
+                                <option value="">--Selecione--</option>
+                                <option value="billet">Boleto</option>                                         
+                                <option value="check">Cheque</option>
+                                <option value="bank_deposit">Depósito Bancário</option>
+                                <option value="money">Dinheiro</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Conta Bancária:</label>
+                            <select class="form-control" style="width: 100%;" name="bank_account" id="bank_account" required>
+                                <option value="">--Selecione--</option>
+                                <?php  if(!empty($bank_accounts)):
+                                        foreach ($bank_accounts as $bank_account):?>
+                                        <option value="<?=$bank_account->id?>"><?=$bank_account->fullAccount()?></option>
+                                <?php   endforeach;
+                                    endif;?>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Carteira:</label>
+                            <select class="form-control" style="width: 100%;" name="wallet" required>
+                                <option value="">--Selecione--</option>
+                                <option value="<?=$main_wallet->id?>"><?=$main_wallet->description?></option>                                         
+                                <?php foreach ($wallets as $wallet): ?>
+                                        <option value="<?=$wallet->id?>"><?=$wallet->description?></option>
+                                <?php endforeach; ?>                                   
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Categoria:<i class="far fa-question-circle"  style="cursor:pointer" data-toggle="modal" data-target="#modalCategory"></i></label>
+                            <select class="form-control" style="width: 100%;" required name="category" id="category">
+                                <option value="">--Selecione--</option>
+                                    <?php foreach ($categories as $category):?>
+                                        <option value="<?=$category->id?>"><?=$category->description?></option>
+                                    <?php endforeach;?>                           
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Data de Vencimento:</label>
+                            <input type="text" class="form-control mask-date" name="due_date" placeholder="dd/mm/yyyy" required/>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Data de Referência:</label>
+                            <input type="text" class="form-control mask-date2" name="reference_date" placeholder="mm/yyyy" required/>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Tipo:</label>
+                            <select class="form-control" style="width: 100%;" name="type" id="type">
+                                <option value="1">Crédito</option>                                         
+                                <option value="2">Débito</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Valor da Despesa:</label>
+                            <input class="form-control mask-money" type="text" name="value" id="value" required />
+                        </div>
+                        <div class="col-md-12">
+                            <label>Observação:</label>
+                            <textarea class="form-control" name="note"></textarea>
+                        </div>
+                    </div><br>
+                    <div class="row">
+                          <button class="btn btn-success btn-lg btn-block"><i class="fas fa-edit"> Alterar</i></button>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<?php $v->start("scripts");
+    <!--modal compensation-->
+    <div class="modal fade" id="modalCompensation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="compensation">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Compensação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+               <div class="modal-body">
+                 <form action="<?= $router->route("invoice.compensationAdd"); ?>" enctype="multipart/form-data" method="post">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Forma de Compensação:</label>
+                            <select class="form-control" style="width: 100%;" name="compensation_form" id="compensation_form">
+                                <option value="">Por pagamento</option>
+                                <option value="">Sem Pagamento</option>                                         
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Data da Baixa:</label>
+                            <input class="form-control mask-date" type="text" name="value" id="value" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Valor Original:</label>
+                            <input class="form-control mask-money" disabled type="text" name="value" id="value" />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Valor Final:</label>
+                            <input class="form-control mask-money" type="text" name="value" id="value" required />
+                        </div>
+                    </div><br>
+                    <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-8">
+                            <button class="btn btn-success"><i class="fas fa-edit"> Incluir</i></button>
+                        </div>
+                    </div>
+                 </form>
+               </div>
+            </div>
+        </div>
+    </div>
+
+   <!--modal category-->
+   <div class="modal fade" id="modalCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="category">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Categoria</h5>
+                    <button type="button" class="close" id="close_category" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                   <div class="create">
+                    <form class="ajax_form" action="<?= $router->route("auxiliar.categoryInvoiceAdd"); ?>" name="gallery" method="post"
+                            enctype="multipart/form-data">
+                
+                        <label>
+                            <input type="text" class="form-control" name="category" required placeholder="Categoria:"/>
+                        </label>
+                        <label>
+                            <select class="form-control" style="width: 100%;" required name="operation" id="operation">
+                                <option value="">--Tipo da categoria--</option>
+                                <option value="income">Crédito</option>
+                                <option value="expense">Débito</option>
+                                <option value="both">Ambos</option>                         
+                            </select>
+                        </label>
+                        <div>
+                            <div class="col-sm-12">
+                                <!-- checkbox -->
+                                <div class="form-group clearfix">
+                                    <label>Comissionado: </label>
+                                    <div class="icheck-success d-inline">
+                                        <input type="checkbox" name="comission" checked id="checkboxComission">
+                                        <label for="checkboxComission">
+                                        </label>
+                                    </div><br>
+                                    <label>Extra Extrato: </label>
+                                    <div class="icheck-success d-inline">
+                                        <input type="checkbox" name="extra_extract"  id="checkboxExtraExtract">
+                                        <label for="checkboxExtraExtract">
+                                        </label>
+                                    </div><br>
+                                    <label>Carnê-leão: </label>
+                                    <div class="icheck-success d-inline">
+                                        <input type="checkbox" name="mandatory_collection"  id="checkboxMandatoryCollection">
+                                        <label for="checkboxMandatoryCollection">
+                                        </label>
+                                    </div><br>
+                                    <label>IR: </label>
+                                    <div class="icheck-success d-inline">
+                                        <input type="checkbox" name="income_tax"  id="checkboxIncomeTax">
+                                        <label for="checkboxIncomeTax">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>                 
+                        </div> <br>
+                        <div align="left" >
+                            <button class="btn btn-success"><i class="fas fa-edit"> Adicionar Novo</i></button>
+                        </div>                       
+                    </form>
+                   </div>
+                    <main class="content">
+                        <section class="auxs12">
+                            <?php 
+                                if($categories_add):
+                                    foreach ($categories_add as $category_add):
+                                        $v->insert("register/fragments/category",["category" => $category_add]);
+                                    endforeach;
+                                endif;
+                            ?>
+                        </section>
+                    </main>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+<?php $v->start("scripts"); ?>
+<script src="<?= url("/shared/scripts/compensation.js"); ?>"></script>
+<?php
 if(!$invoices):
     ?>
     <script>

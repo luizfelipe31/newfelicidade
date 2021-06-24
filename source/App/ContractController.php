@@ -511,8 +511,8 @@ class ContractController extends Admin
                 $invoice_create->payment_form = $data->paymento_form;
                 $invoice_create->operation = 1;
                 $invoice_create->category = 1;
-                $invoice_create->wallet = $data->bank_account;
-                $invoice_create->bank_account_id = $data->wallet;
+                $invoice_create->wallet = $data->wallet;
+                $invoice_create->bank_account_id = $data->bank_account;
                 $invoice_create->reference_date = $reference_date;
                 $invoice_create->due_date = $due_date;
                 $invoice_create->contract = $contract->id;

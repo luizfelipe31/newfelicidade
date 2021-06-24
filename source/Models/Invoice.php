@@ -127,6 +127,27 @@ class Invoice extends DataLayer   {
         return null;
     }
 
+    public function walltetDesc(): ?Wallet {
+        if($this->wallet){
+          return (new Wallet())->findById($this->wallet);
+        }
+        return null;
+    }
+
+    public function bankDesc() {
+        $user = User::UserLog();
+
+        $connect = Connect::getInstance();
+
+        $property = $connect->query("SELECT banks.description as bank,type_accounts.description as type_account,agency,number_account,pix
+        from bank_accounts
+        inner join banks on banks.id=bank_accounts.bank
+        inner join type_accounts on type_accounts.id=bank_accounts.type_account
+        where bank_accounts.id='{$this->bank_account_id}' and bank_accounts.account_id='{$user->account_id}' ");
+
+        return $property->fetch();
+    }
+
     public function contractDesc() {
         $user = User::UserLog();
 

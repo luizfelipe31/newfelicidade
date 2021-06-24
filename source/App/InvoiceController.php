@@ -186,7 +186,7 @@ class InvoiceController extends Admin
         $type="all";
         $operation="both";
 
-        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true);
+        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and account_id=:c and compensation_date is null ","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true);
 
         if (!empty($data["action"]) && $data["action"] == "search") {
 
@@ -205,17 +205,17 @@ class InvoiceController extends Admin
                 if($data->type!="all"){
                     $type=$data->type;
                     if($type=="adm"){
-                        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and operation=:o and lessor=0 and property=0 and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}&o={$data->operation}")->fetch(true); 
+                        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and operation=:o and lessor=0 and property=0 and compensation_date is null and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}&o={$data->operation}")->fetch(true); 
                     }
                     if($type=="property"){
-                        $invoices = (new Invoice)->find("(status=1 and due_date between :s and :e and operation=:o and lessor=0 and property!=0 and account_id=:c) or (status=1 and due_date between :s and :e and operation=:o and contract is not null and account_id=:c) ","c={$this->user->account_id}&s={$date_start}&e={$date_end}&o={$data->operation}")->fetch(true); 
+                        $invoices = (new Invoice)->find("(status=1 and due_date between :s and :e and operation=:o and lessor=0 and property!=0  and compensation_date is null and account_id=:c) or (status=1 and due_date between :s and :e and operation=:o and compensation_date is null  and contract is not null and account_id=:c) ","c={$this->user->account_id}&s={$date_start}&e={$date_end}&o={$data->operation}")->fetch(true); 
                     }
                     if($type=="lessor"){
-                        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and operation=:o and lessor!=0 and property=0 and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}&o={$data->operation}")->fetch(true); 
+                        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and operation=:o and lessor!=0 and property=0 and compensation_date is null and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}&o={$data->operation}")->fetch(true); 
                     }
                     
                 }else{
-                    $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and operation=:o and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}&o={$data->operation}")->fetch(true); 
+                    $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and operation=:o and compensation_date is null  and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}&o={$data->operation}")->fetch(true); 
                 }
 
             }else{
@@ -223,22 +223,28 @@ class InvoiceController extends Admin
                 if($data->type!="all"){
                     $type=$data->type;
                     if($type=="adm"){
-                        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and lessor=0 and property=0 and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true); 
+                        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and lessor=0 and property=0 and compensation_date is null and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true); 
                     }
                     if($type=="property"){
-                        $invoices = (new Invoice)->find("(status=1 and due_date between :s and :e and lessor=0 and property!=0 and account_id=:c) or (status=1 and due_date between :s and :e and contract is not null and account_id=:c)","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true); 
+                        $invoices = (new Invoice)->find("(status=1 and due_date between :s and :e and lessor=0 and property!=0 and compensation_date is null and account_id=:c) or (status=1 and due_date between :s and :e and contract is not null and compensation_date is null and account_id=:c)","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true); 
                     }
                     if($type=="lessor"){
-                        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and lessor!=0 and property=0 and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true); 
+                        $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and lessor!=0 and property=0 and compensation_date is null  and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true); 
                     }
                 }else{
-                    $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true);
+                    $invoices = (new Invoice)->find("status=1 and due_date between :s and :e and compensation_date is null and account_id=:c ","c={$this->user->account_id}&s={$date_start}&e={$date_end}")->fetch(true);
                 } 
 
             }
 
             
         }
+
+        $wallets = (new Wallet)->find("status=1 and account_id=:c","c={$this->user->account_id}")->order('description asc')->fetch(true);
+        $main_wallet = (new Wallet)->find("id=1")->fetch();
+        $bank_accounts = (new BankAccount)->find("status=1 and account_id=:c","c={$this->user->account_id}")->fetch(true);
+        $categories = (new Category)->find("(status=1 and account_id is null and operation!='income') or (status=1 and account_id=:c and operation!='income')","c={$this->user->account_id}")->order("description asc")->fetch(true);
+        $categories_add = (new Category)->find("status=1 and account_id=:c","c={$this->user->account_id}")->order("description asc")->fetch(true);
 
         $head = $this->seo->render(
             CONF_SITE_NAME . " | Compensação",
@@ -256,7 +262,12 @@ class InvoiceController extends Admin
             "date_start" => $date_start,
             "date_end" => $date_end,
             "operation" => $operation,
-            "type" => $type
+            "type" => $type,
+            "bank_accounts" => $bank_accounts,
+            "wallets" => $wallets,
+            "main_wallet" => $main_wallet,
+            "categories" => $categories,
+            "categories_add" => $categories_add
         ]);
     }
     
