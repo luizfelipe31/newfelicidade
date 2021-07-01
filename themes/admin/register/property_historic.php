@@ -85,15 +85,6 @@
 
 
 <?php $v->start("scripts");
-if(!empty(flash())):
-    ?>
-    <script>
-        $(function () {
-            toastr.success("O histórico foi excluído com sucesso...");
-        });
-    </script>
-<?php
-endif;
 if(!$property_historics):
     ?>
     <script>

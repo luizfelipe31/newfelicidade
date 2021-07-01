@@ -92,17 +92,20 @@
                                             <td>
                                             <?php
                                                 if($invoice->contract!=""){
+                                                  $label="<b>Imóvel:</b> ".$invoice->contractDesc()->street." ".$invoice->contractDesc()->number." ".$invoice->contractDesc()->complement.", ".$invoice->contractDesc()->district." - ".$invoice->contractDesc()->state." - ".$invoice->contractDesc()->city;
                                                   echo "<b>Imóvel:</b> ".$invoice->contractDesc()->street." ".$invoice->contractDesc()->number." ".$invoice->contractDesc()->complement.", ".$invoice->contractDesc()->district." - ".$invoice->contractDesc()->state." - ".$invoice->contractDesc()->city;
                                                 }else{
                                                     if($invoice->lessor==0 && $invoice->property==0){
-                                                        echo "Admistradora de Imóveis";
+                                                        echo "Admistradora de Imóveis";$label="Admistradora de Imóveis";
                                                     } else { 
 
                                                         if($invoice->property!="" && $invoice->property!=0){
+                                                        $label="<b>Imóvel:</b> ".$invoice->propertyDesc()->street." ".$invoice->propertyDesc()->number." ".$invoice->propertyDesc()->complement.", ".$invoice->propertyDesc()->district." - ".$invoice->propertyDesc()->state." - ".$invoice->propertyDesc()->city;
                                                         echo "<b>Imóvel:</b> ".$invoice->propertyDesc()->street." ".$invoice->propertyDesc()->number." ".$invoice->propertyDesc()->complement.", ".$invoice->propertyDesc()->district." - ".$invoice->propertyDesc()->state." - ".$invoice->propertyDesc()->city;
                                                         } 
                                                         if($invoice->lessor!="" && $invoice->lessor!=0){
-                                                        echo "<b>Locador:</b> ".$invoice->clientDesc()->fullName();
+                                                          $label="<b>Locador:</b> ".$invoice->clientDesc()->fullName();
+                                                          echo "<b>Locador:</b> ".$invoice->clientDesc()->fullName();
                                                         }  
                                                     }
                                                 }    
@@ -116,8 +119,8 @@
                                             <td><?=($invoice->bank_account_id==0)? "Pagamento em Dinheiro"  : " Conta ".$invoice->bankDesc()->type_account." ".$invoice->bankDesc()->bank." Ag:".$invoice->bankDesc()->agency." Conta:".$invoice->bankDesc()->number_account;?></td>
                                             <td><?=date_fmt2($invoice->due_date)?></td>
                                             <td><div <?=($invoice->operation==1) ? "style='color:green'" : "style='color:red'"?>><?=str_price($invoice->value)?></div></td>
-                                            <td><a href="#" data-toggle="modal" data-target="#modalExpense" class="fas fa-edit invoice_expense" <?=($invoice->operation==1) ? "style='color:green'" : "style='color:red'"?>></a></td>
-                                            <td><a href="#" data-toggle="modal" data-target="#modalCompensation" class="fas fa-dollar-sign invoice_expense" <?=($invoice->operation==1) ? "style='color:green'" : "style='color:red'"?>></a></td>
+                                            <td><a href="#" data-toggle="modal" data-target="#modalExpense" data-label="<?=$label?>" data-id="<?=$invoice->id?>" class="fas fa-edit invoice_expense" <?=($invoice->operation==1) ? "style='color:green'" : "style='color:red'"?>></a></td>
+                                            <td><a href="#" data-toggle="modal" data-target="#modalCompensation" data-label="<?=$label?>" data-value="<?=str_price($invoice->value)?>" data-id="<?=$invoice->id?>" class="fas fa-dollar-sign invoice_compensation" <?=($invoice->operation==1) ? "style='color:green'" : "style='color:red'"?>></a></td>
                                         </tr>
                                       <?php 
                                             if($invoice->operation==1):
@@ -163,13 +166,12 @@
                 </div>
                <div class="modal-body">
                <div align="center" id="label_desc"></div><br>
-               <form action="<?= $router->route("invoice.expenseAdd"); ?>" enctype="multipart/form-data" method="post">
-                    <input type="hidden" name="lessor" id="lessor_value" />
-                    <input type="hidden" name="property" id="property_value" />
+               <form class="ajax_form2" action="<?= $router->route("invoice.invoiceUpdate"); ?>" enctype="multipart/form-data" method="post">
+               <input type="hidden" name="invoice_id" id="invoice_id_alter" />
                     <div class="row">
                         <div class="col-md-6">
                             <label>Forma de Pagamento:</label>
-                            <select class="form-control" style="width: 100%;" name="payment_form" id="paymento_form" required>
+                            <select class="form-control" style="width: 100%;" name="payment_form" id="payment_form" required>
                                 <option value="">--Selecione--</option>
                                 <option value="billet">Boleto</option>                                         
                                 <option value="check">Cheque</option>
@@ -190,7 +192,7 @@
                         </div>
                         <div class="col-md-6">
                             <label>Carteira:</label>
-                            <select class="form-control" style="width: 100%;" name="wallet" required>
+                            <select class="form-control" style="width: 100%;" name="wallet" id="wallet" required>
                                 <option value="">--Selecione--</option>
                                 <option value="<?=$main_wallet->id?>"><?=$main_wallet->description?></option>                                         
                                 <?php foreach ($wallets as $wallet): ?>
@@ -209,11 +211,11 @@
                         </div>
                         <div class="col-md-6">
                             <label>Data de Vencimento:</label>
-                            <input type="text" class="form-control mask-date" name="due_date" placeholder="dd/mm/yyyy" required/>
+                            <input type="text" class="form-control mask-date" name="due_date" id="due_date" placeholder="dd/mm/yyyy" required/>
                         </div>
                         <div class="col-md-6">
                             <label>Data de Referência:</label>
-                            <input type="text" class="form-control mask-date2" name="reference_date" placeholder="mm/yyyy" required/>
+                            <input type="text" class="form-control mask-date2" name="reference_date" id="reference_date" placeholder="mm/yyyy" required/>
                         </div>
                         <div class="col-md-6">
                             <label>Tipo:</label>
@@ -228,11 +230,21 @@
                         </div>
                         <div class="col-md-12">
                             <label>Observação:</label>
-                            <textarea class="form-control" name="note"></textarea>
+                            <textarea class="form-control" name="note" id="note"></textarea>
                         </div>
                     </div><br>
                     <div class="row">
-                          <button class="btn btn-success btn-lg btn-block"><i class="fas fa-edit"> Alterar</i></button>
+                      <div class="col-md-1">
+                      </div>
+                      <div class="col-md-5">
+                          <button class="btn btn-success btn-block"><i class="fas fa-edit"> Alterar</i></button>
+                      </div>
+                      <div class="col-md-5">
+                        <button type="button" id="invoice_trash" class="btn btn-danger btn-block"
+                           data-url="<?= url("/invoice/excluir"); ?>"
+                           data-confirm="ATENÇÃO: Tem certeza que deseja excluir o lançamento? Essa ação não pode ser desfeita!"
+                        ><i class="fas fa-trash"> Excluir</i></button>
+                      </div>
                     </div>
                 </form>
                 </div>
@@ -251,7 +263,9 @@
                     </button>
                 </div>
                <div class="modal-body">
-                 <form action="<?= $router->route("invoice.compensationAdd"); ?>" enctype="multipart/form-data" method="post">
+               <div align="center" id="label_desc_compensation"></div><br>
+                 <form class="ajax_form2" action="<?= $router->route("invoice.compensationAdd"); ?>" enctype="multipart/form-data" method="post">
+                    <input type="hidden" name="invoice_id" id="invoice_id" />
                     <div class="row">
                         <div class="col-md-6">
                             <label>Forma de Compensação:</label>
@@ -261,23 +275,23 @@
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label>Data da Baixa:</label>
-                            <input class="form-control mask-date" type="text" name="value" id="value" required />
+                            <label>Data da Compensação:</label>
+                            <input class="form-control mask-date" type="text" name="date_compensation" id="date_compensation" placeholder="Data da Compensação" required />
                         </div>
                         <div class="col-md-6">
                             <label>Valor Original:</label>
-                            <input class="form-control mask-money" disabled type="text" name="value" id="value" />
+                            <input class="form-control mask-money" type="text" disabled name="value_current" id="value_current" />
                         </div>
                         <div class="col-md-6">
                             <label>Valor Final:</label>
-                            <input class="form-control mask-money" type="text" name="value" id="value" required />
+                            <input class="form-control mask-money" type="text" name="value_compensation" id="value_compensation" required />
                         </div>
                     </div><br>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                         </div>
                         <div class="col-md-8">
-                            <button class="btn btn-success"><i class="fas fa-edit"> Incluir</i></button>
+                            <button class="btn btn-success btn-block"><i class="fas fa-edit"> Cadastrar</i></button>
                         </div>
                     </div>
                  </form>
@@ -372,9 +386,10 @@ if(!$invoices):
     ?>
     <script>
         $(function () {
-            toastr.error("Nenhum cliente encontrado");
+            toastr.error("Nenhum registro encontrado");
         });
     </script>
 <?php
 endif;
 $v->end(); ?>
+

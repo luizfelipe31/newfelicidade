@@ -86,15 +86,3 @@
 
 </div><!-- /.content-wrapper -->
 
-<?php $v->start("scripts");
-if(!empty(flash())):
-    ?>
-    <script>
-        $(function () {
-            toastr.success("Rateio cadastrado com sucesso!");
-        });
-    </script>
-<?php
-endif;
-?>
-<?php $v->end(); ?>

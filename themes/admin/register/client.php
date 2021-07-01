@@ -94,15 +94,6 @@
 </div><!-- /.content-wrapper-->
 
 <?php $v->start("scripts");
-if(!empty(flash())):
-    ?>
-    <script>
-        $(function () {
-            toastr.success("O cliente foi excluído com sucesso...");
-        });
-    </script>
-<?php
-endif;
 if(!$clients):
     ?>
     <script>

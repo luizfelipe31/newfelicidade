@@ -109,15 +109,7 @@
 </div>
 
 <?php $v->start("scripts");
-if(!empty(flash())):
-    ?>
-    <script>
-        $(function () {
-            toastr.success("O rateio foi excluído com sucesso...");
-        });
-    </script>
-<?php
-endif;
+
 if(!$apportionments):
     ?>
     <script>

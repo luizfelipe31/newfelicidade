@@ -284,7 +284,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="pages/mailbox/compose.html" class="nav-link">
+                                <a href="<?= $router->route("invoice.incoming"); ?>" <?php if($submenu=="incoming"):?>class="nav-link active"<?php else:?>class="nav-link"<?php endif?>>
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Lançar Cobranças</p>
                                 </a>
@@ -298,7 +298,7 @@
                             <li class="nav-item">
                                 <a href="pages/mailbox/compose.html" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Lançamentos Múltiplos</p>
+                                    <p>Lançamentos Múltiplos <i style="color:red">EM BREVE</i></p>
                                 </a>
                             </li>
                             <li class="nav-item">

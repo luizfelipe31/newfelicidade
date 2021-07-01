@@ -683,19 +683,6 @@
             </div>
         </div>
     </div>
-<?php $v->start("scripts");
-
-
-if(!empty(flash())):
-    ?>
-    <script>
-        $(function () {
-            toastr.success("Imóvel alterado com sucesso!");
-        });
-    </script>
-<?php
-endif;
-?>
-
+<?php $v->start("scripts");?>
     <script src="<?= url("/shared/scripts/property.js"); ?>"></script>
 <?php $v->end(); ?>

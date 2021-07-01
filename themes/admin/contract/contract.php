@@ -86,15 +86,6 @@
 </div><!-- /.content-wrapper-->
 
 <?php $v->start("scripts");
-if(!empty(flash())):
-    ?>
-    <script>
-        $(function () {
-            toastr.success("O contrato foi encerrado com sucesso...");
-        });
-    </script>
-<?php
-endif;
 if(!$contracts):
     ?>
     <script>

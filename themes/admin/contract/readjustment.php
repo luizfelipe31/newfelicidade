@@ -75,7 +75,7 @@
                     </div>
                     <!-- /.card-header -->
                     <br>
-                    <form action="<?= $router->route("contract.readjustmentDo"); ?>" method="post" >
+                    <form class="ajax_form2" action="<?= $router->route("contract.readjustmentDo"); ?>" method="post" >
                         <?= csrf_input(); ?>
                         <input type="hidden" name="date_readjustment_hiden" value="<?= $date_readjustment ?>"/>
                         <div class="row">
@@ -161,16 +161,7 @@
 
 <?php $v->start("scripts"); ?>
 <script src="<?= url("/shared/scripts/contract_reajustment.js"); ?>"></script>
-
-<?php if (!empty(flash())):
-    ?>
-    <script>
-        $(function () {
-            toastr.success("Contrato(s) reajustado(s) com sucesso.");
-        });
-    </script>
-    <?php
-endif;
+<?php 
 if (!$contracts):
     ?>
     <script>

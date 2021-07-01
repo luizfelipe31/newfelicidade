@@ -54,7 +54,7 @@
                     </div>
                     <!-- /.card-header -->
                     <br>
-                    <form action="<?= $router->route("contract.renovationDo"); ?>" method="post" >
+                    <form class="ajax_form2" action="<?= $router->route("contract.renovationDo"); ?>" method="post" >
                         <?= csrf_input(); ?>
                         <div class="row">
                             <div class="col-md-5">
@@ -137,16 +137,7 @@
 </div>
 <?php $v->start("scripts"); ?>
 <script src="<?= url("/shared/scripts/contract_renovation.js"); ?>"></script>
-
-<?php if (!empty(flash())):
-    ?>
-    <script>
-        $(function () {
-            toastr.success("Contrato(s) renovador(s) com sucesso.");
-        });
-    </script>
-    <?php
-endif;
+<?php 
 if (!$contracts):
     ?>
     <script>

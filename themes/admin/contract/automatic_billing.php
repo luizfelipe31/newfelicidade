@@ -156,17 +156,7 @@
     </div>
 </div>
 
-<?php $v->start("scripts");
-
-if(!$contracts):
-    ?>
-    <script>
-        $(function () {
-            toastr.error("Nenhum contrato encontrado");
-        });
-    </script>
-<?php
-endif;?>
+<?php $v->start("scripts");?>
 <script src="<?= url("/shared/scripts/contract.js"); ?>"></script>
 <?php $v->end(); ?>
 

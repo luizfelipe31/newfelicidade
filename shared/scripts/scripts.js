@@ -112,6 +112,57 @@ $(function () {
         }
     });
 
+    $(".ajax_form2").submit(function (e) {
+        //if($("form:not('.ajax_form2')")){
+        e.preventDefault();
+
+        var form = $(this);
+        var load = $(".ajax_load");
+
+        form.ajaxSubmit({
+            url: form.attr("action"),
+            type: "POST",
+            dataType: "json",
+            beforeSend: function () {
+                load.fadeIn(200).css("display", "flex");
+            },
+            uploadProgress: function (event, position, total, completed) {
+                var loaded = completed;
+                var load_title = $(".ajax_load_box_title");
+                load_title.text("Enviando (" + loaded + "%)");
+
+                if (completed >= 100) {
+                    load_title.text("Aguarde, carregando...");
+                }
+            },
+            success: function (response) {
+                //redirect
+                if (response.redirect) {
+                    window.location.href = response.redirect;
+                } else {
+                    load.fadeOut(200);
+                }
+
+                //Success
+                if(response.success){
+                    toastr.success(response.success);
+                }
+                //Error
+                if (response.message) {
+                    //$(".ajax_response").html(response.message).effect("bounce");
+                    toastr.error(response.message);
+                }
+            },
+            error: function (response) {
+                load.fadeOut(200);
+            }
+
+
+        });
+
+    });
+
+
     $(".ajax_form").submit(function (e) {
         e.preventDefault();
 

@@ -962,16 +962,6 @@
         </div>
     </div>
 
-<?php $v->start("scripts");
-if(!empty(flash())):
-    ?>
-    <script>
-        $(function () {
-            toastr.success("Cliente alterado com sucesso!");
-        });
-    </script>
-<?php
-endif;
-?>
+<?php $v->start("scripts");?>
     <script src="<?= url("/shared/scripts/client.js"); ?>"></script>
 <?php $v->end(); ?>

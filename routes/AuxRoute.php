@@ -48,3 +48,5 @@ $router->get("/cadastro/historic/select","Auxiliar:historicSelect","auxiliar.his
 $router->post("/cadastro/category", "Auxiliar:categoryInvoiceAdd","auxiliar.categoryInvoiceAdd");
 $router->post("/cadastro/category/delete","Auxiliar:categoryInvoiceDelete","auxiliar.categoryInvoiceDelete");
 $router->get("/cadastro/category/select","Auxiliar:categoryInvoiceSelect","auxiliar.categoryInvoiceSelect");
+
+$router->get("/financeiro/lancamento/search/{id}","InvoiceController:invoiceSearch","invoice.invoiceSearch");

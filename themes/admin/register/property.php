@@ -73,15 +73,6 @@
 </div><!-- /.content-wrapper-->
 
 <?php $v->start("scripts");
-if(!empty(flash())):
-    ?>
-    <script>
-        $(function () {
-            toastr.success("O imóvel foi excluído com sucesso...");
-        });
-    </script>
-<?php
-endif;
 if(!$properties):
     ?>
     <script>

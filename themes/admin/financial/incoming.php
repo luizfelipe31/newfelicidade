@@ -6,12 +6,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0"><i class="fas fa-dollar-sign"></i> Despesas</h1>
+                    <h1 class="m-0"><i class="fas fa-dollar-sign"></i> Cobranças</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="<?= $router->route("dash.dash"); ?>">Home</a></li>
-                        <li class="breadcrumb-item active">Despesas</li>
+                        <li class="breadcrumb-item active">Cobranças</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -23,7 +23,7 @@
         <div class="card-body pb-0">
             <div class="row">
                 <div class="col-md-4">
-                    <label>Despesa por:</label>
+                    <label>Cobranças por:</label>
                     <select class="form-control" style="width: 100%;" id="type" name="type">
                         <option selected value="property">Imóvel</option>
                         <option value="lessee">Locador</option>
@@ -49,7 +49,7 @@
                     <td>--</td>
                     <td>--</td>
                     <td>--</td>
-                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalExpense" data-property="0" data-label="Administradora de Imóvel" class="fas fa-dollar-sign invoice_expense" style="color:red"></a></td>
+                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalIncoming" data-property="0" data-label="Administradora de Imóvel" class="fas fa-dollar-sign invoice_incoming" style="color:green"></a></td>
                    </tr>
                    <?php if($properties):
                            foreach($properties as $property):
@@ -71,7 +71,7 @@
                         endforeach;
                         ?>
                     </td>
-                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalExpense" data-property="<?=$property->id?>" data-label="<?=$propertie_label?>" class="fas fa-dollar-sign invoice_expense" style="color:red"></a></td>
+                    <td align="center"><a href="#" data-toggle="modal" data-target="#modalIncoming" data-property="<?=$property->id?>" data-label="<?=$propertie_label?>" class="fas fa-dollar-sign invoice_incoming" style="color:green"></a></td>
                    </tr>
                    <?php 
                            endforeach;
@@ -96,7 +96,7 @@
                    <tr>
                      <td><?=$client->fullName()?></td>
                      <td><?=($client->person=="natural_person")? "Física" : "Jurídica";?></td>
-                     <td align="center"><a href="#"  data-toggle="modal" data-target="#modalExpense" data-lessor="<?=$client->id?>" data-label="<?=$cliente_label?>" class="fas fa-dollar-sign invoice_expense" style="color:red"></a></td>
+                     <td align="center"><a href="#"  data-toggle="modal" data-target="#modalIncoming" data-lessor="<?=$client->id?>" data-label="<?=$cliente_label?>" class="fas fa-dollar-sign invoice_incoming" style="color:green"></a></td>
                    </tr>
                 <?php 
                            endforeach;
@@ -109,12 +109,12 @@
 
 </div><!-- /.content-wrapper-->
 
-    <!--modal Expense-->
-    <div class="modal fade" id="modalExpense" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="expense">
+    <!--modal Incoming-->
+    <div class="modal fade" id="modalIncoming" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="incoming">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel" style="color:red">Lançar Despesa</h5>
+                    <h5 class="modal-title" id="exampleModalLabel" style="color:green">Lançar Cobrança</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -189,19 +189,19 @@
                             <!-- checkbox -->
                             <div class="form-group clearfix">
                                 <label>Única: </label>
-                                <div class="icheck-danger d-inline">
+                                <div class="icheck-success d-inline">
                                     <input type="checkbox" name="expense_unique" checked id="checkboxSuccess1">
                                     <label for="checkboxSuccess1">
                                     </label>
                                 </div>
                                 <label>Fixa: </label>
-                                <div class="icheck-danger d-inline">
+                                <div class="icheck-success d-inline">
                                     <input type="checkbox" name="expense_fixed"  id="checkboxSuccess2">
                                     <label for="checkboxSuccess2">
                                     </label>
                                 </div>
                                 <label>Parcelado: </label>
-                                <div class="icheck-danger d-inline">
+                                <div class="icheck-success d-inline">
                                     <input type="checkbox" name="expense_installments"  id="checkboxSuccess3">
                                     <label for="checkboxSuccess3">
                                     </label>
@@ -229,6 +229,9 @@
                         </div>
                     </div>
                 </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="container"></div>
                 </div>
             </div>
         </div>
@@ -314,5 +317,5 @@
         </div>
     </div>
 <?php $v->start("scripts");  ?>
-<script src="<?= url("/shared/scripts/expose.js"); ?>"></script>
+<script src="<?= url("/shared/scripts/incoming.js"); ?>"></script>
 <?php $v->end(); ?>

@@ -116,16 +116,6 @@
         </div>
     </div>
 
-<?php $v->start("scripts");
-if(!empty(flash())):
-    ?>
-    <script>
-        $(function () {
-            toastr.success("Histórico cadastrado com sucesso!");
-        });
-    </script>
-<?php
-endif;
-?>
+<?php $v->start("scripts");?>
     <script src="<?= url("/shared/scripts/property_historic.js"); ?>"></script>
 <?php $v->end(); ?>
